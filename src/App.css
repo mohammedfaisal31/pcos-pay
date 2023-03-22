@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.MuiOutlinedInput-notchedOutline {
+  border-width: 1px !important;
+}
+
+.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #ef6223 !important;
+}
+
+.MuiInputLabel-root .MuiInputLabel-outlined .MuiInputLabel-filled	 .MuiInputLabel-standard	.MuiInputLabel-formControl .MuiOutlinedInput-input{
+  color:#ef6223
+}

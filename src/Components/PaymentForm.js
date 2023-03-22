@@ -11,6 +11,7 @@ import {
   FormHelperText,
   Typography,
   Grid,
+  Box,
 } from "@mui/material";
 import axios from "axios";
 import { GatewayDataContext } from "./Context/GatewayDataContext";
@@ -37,6 +38,27 @@ function formatRupee(amount) {
     currency: 'INR',
     minimumFractionDigits: 0
   });
+}
+
+const box_style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: window.innerHeight-20,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+const clickhereButton = {
+  background: "none",
+  border: "none",
+  color: "blue",
+  textDecoration: "underline",
+  cursor: "pointer",
+  marginTop:"2%"
 }
 const PaymentForm = () => {
   
@@ -242,23 +264,34 @@ const PaymentForm = () => {
         <><Typography >Package value : {amountTitle}</Typography>
         <Typography style={{color:"#b00020"}}>To pay : {formatRupee(totalAmount)}</Typography>
         
-        <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%"}} onClick={createPaymentRequest}>
+        <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#7c2d32"}}  onClick={createPaymentRequest}>
           PAY NOW
-        </Button></> :
-        
-      <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%"}}>
-      CHECK PRICE
-    </Button>
+        </Button>
+        <Typography style={{marginTop:"5%"}}>Note : 5% extra processing charges may be applicable</Typography>
+        </> :
+      <>
+            <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ef6223"}} >
+              CHECK PRICE
+            </Button>
+            <Typography><button style={clickhereButton} onClick={handleOpenModal}>Click here</button> to see the detailed pricing</Typography> 
+      </>  
       }
-      <Typography style={{marginTop:"5%"}}>Note : 5% extra processing charges may be applicable</Typography>
-      {/* <Typography><button onClick={handleOpenModal}>Click here</button> to see the pricing table</Typography> */}
       <Modal
         open={openModal}
         onClose={handleModalClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
+        <Box sx={box_style}>
         <RateCardWrapper/>
+        <div style={{alignItems:"center",textAlign:"center"}}>
+          <Typography sx={{color:"red"}} align="center">T&C apply</Typography>
+          <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleModalClose} variant="contained">OK</Button>
+        </div>
+        </Box>
+        
+        
+        
       </Modal>
     </form>
     </>

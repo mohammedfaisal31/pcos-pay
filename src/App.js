@@ -9,8 +9,11 @@ import { ModeContextProvider } from './Components/Context/ModeContext';
 import PaymentStatus from './Components/PaymentStatus';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import RateCard from './Components/RateCard';
+import { useEffect } from 'react';
+
 
 function App() {
+  
   return <div>
        <Router>
         <Routes>

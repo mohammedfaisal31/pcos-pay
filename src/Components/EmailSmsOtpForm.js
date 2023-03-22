@@ -169,11 +169,11 @@ return (
                   
                 />
                 
-                <Button variant="contained" color="primary" type="submit" disabled={!isValid}>
+                <Button variant="contained" color="primary" type="submit" disabled={!isValid} style={{backgroundColor:"#ef6223"}}>
                   Verify
                 </Button>
                 <div style={{marginBottom:"5%",marginTop:"5%"}}>
-                {resendButton ? <><Button variant="contained"  onClick={handleResendOTP}>RESEND OTP</Button></> : <><Typography>Didn't receive OTP? </Typography><Typography>Please wait to resend({timeLeft}s)</Typography></>}
+                {resendButton ? <><Button variant="contained" style={{backgroundColor:"#7c2d32"}} onClick={handleResendOTP}>RESEND OTP</Button></> : <><Typography>Didn't receive OTP? </Typography><Typography>Please wait to resend({timeLeft}s)</Typography></>}
                 </div>
               </Grid>
             </Form>

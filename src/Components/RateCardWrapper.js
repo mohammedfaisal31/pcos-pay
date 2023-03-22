@@ -1,7 +1,8 @@
 import React from 'react'
+import Ratecard from './RateCard'
 
 export default function RateCardWrapper() {
   return (
-    <div>RateCardWrapper</div>
+    <Ratecard/>
   )
 }

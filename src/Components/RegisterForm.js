@@ -358,7 +358,7 @@ const RegisterForm = (props) => {
              </Select>
           </FormControl>
          {phoneError &&<Typography style={{fontSize:"12px",marginBottom:"5%"}}>Note: Please enter or select your country code first then enter phone number</Typography>}
-          <Button type="submit" variant="contained" color="primary" disabled={!isValid }>
+          <Button type="submit" variant="contained" color="primary" disabled={!isValid } style={{backgroundColor:"#ef6223"}}>
             NEXT
           </Button>
         </Form>
