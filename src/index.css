@@ -5,7 +5,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-background-color:#E8E8ED;
+  background-image: url('..\\public\\asset\\blurr-logo.png');
+  height:100%;
+  
 
 }
 

@@ -173,7 +173,7 @@ return (
                   Verify
                 </Button>
                 <div style={{marginBottom:"5%",marginTop:"5%"}}>
-                {resendButton ? <><Button variant="contained" style={{backgroundColor:"#7c2d32"}} onClick={handleResendOTP}>RESEND OTP</Button></> : <><Typography>Didn't receive OTP? </Typography><Typography>Please wait to resend({timeLeft}s)</Typography></>}
+                {resendButton ? <><Button variant="contained" style={{backgroundColor:"#ac2642"}} onClick={handleResendOTP}>RESEND OTP</Button></> : <><Typography>Didn't receive OTP? </Typography><Typography>Please wait to resend({timeLeft}s)</Typography></>}
                 </div>
               </Grid>
             </Form>

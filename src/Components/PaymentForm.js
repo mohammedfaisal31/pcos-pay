@@ -264,7 +264,7 @@ const PaymentForm = () => {
         <><Typography >Package value : {amountTitle}</Typography>
         <Typography style={{color:"#b00020"}}>To pay : {formatRupee(totalAmount)}</Typography>
         
-        <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#7c2d32"}}  onClick={createPaymentRequest}>
+        <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ac2642"}}  onClick={createPaymentRequest}>
           PAY NOW
         </Button>
         <Typography style={{marginTop:"5%"}}>Note : 5% extra processing charges may be applicable</Typography>

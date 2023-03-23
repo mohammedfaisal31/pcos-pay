@@ -10,11 +10,12 @@ import PaymentStatus from './Components/PaymentStatus';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import RateCard from './Components/RateCard';
 import { useEffect } from 'react';
+import Footer from './Components/Footer';
 
 
 function App() {
   
-  return <div>
+  return <div sx={{minHeight: "100vh"}}>
        <Router>
         <Routes>
           <Route path="/paymentStatus/:transaction_id" element={<PaymentStatus />} />
@@ -37,6 +38,7 @@ function App() {
         />
         </Routes>
         </Router>
+          
         </div>
 }
 

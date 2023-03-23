@@ -11,6 +11,9 @@ import { NameContext } from './Context/NameContext.js';
 import { OTPPageRefreshContext } from './Context/OTPPageRefreshContext.js';
 import PaymentForm from './PaymentForm.js';
 import RateCard from './RateCard.js';
+import Footer from './Footer.js';
+import { Icon } from '@mui/material';
+
 
 const styles ={
   root: {
@@ -60,7 +63,9 @@ const Register = ({ children }) => {
           <h2 style={{textAlign:"center"}}>"There is more to PCOS and ART... Beyond the obvious”</h2>
           <Paper className={styles.paper} elevation={5} style={{margin:"5%"}}>
           <div style={{padding:"5%",textAlign:"center"}}>
-          <PaymentsIcon/>
+          <Icon sx={{width:150,height:100}} fontSize="large">
+            <img style={{width:150,height:100}} alt="logo" src='/asset/logo512.png'/>
+          </Icon>
           { detailsSubmitted ? 
               (proceedWithFormClicked ? <PaymentForm /> : <EmailSmsOtpForm email={detailsSubmitted.email} onProceedClicked={handleOnProceedClick}/>)
                 : <Details onSubmit={handleDetailsSubmit} onSuccess={handleSuccess} />
@@ -68,7 +73,9 @@ const Register = ({ children }) => {
           </div>
           </Paper>
         </Grid>
+        
       </Grid>
+      <Footer/>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
@@ -76,6 +83,7 @@ const Register = ({ children }) => {
               <CircularProgress color="inherit" />
         
       </Backdrop>
+      
     </div>
   );
 };
