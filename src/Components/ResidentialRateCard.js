@@ -171,31 +171,31 @@ export default function RateCard() {
           <TableCell sx={{fontWeight:"bold"}}>3 nights and 4 days *International Delegates Conference + 2 Workshops</TableCell>
           <TableCell >
               <TableCell>
-              200 USD  
+              750 USD  
               </TableCell>  
               <TableCell>
-              225 USD  
+              550 USD  
               </TableCell>  
               <TableCell>
-              250 USD
+              800 USD
               </TableCell>  
               <TableCell>
-              275 USD
+              580 USD
               </TableCell>  
               
           </TableCell>  
           <TableCell >
               <TableCell>
-              225 USD 
+              800 USD 
               </TableCell>  
               <TableCell>
-              250 USD
+              600 USD
               </TableCell>  
               <TableCell>
-              275 USD  
+              850 USD  
               </TableCell>  
               <TableCell>
-              300 USD
+              650 USD
               </TableCell>  
               
           </TableCell>  
@@ -204,31 +204,31 @@ export default function RateCard() {
           <TableCell sx={{fontWeight:"bold"}}>2 nights and 3 days *International Delegates Conference + 2 Workshops</TableCell>
           <TableCell >
               <TableCell>
-              125 USD  
+              570 USD  
               </TableCell>  
               <TableCell>
-              150 USD  
+              440 USD  
               </TableCell>  
               <TableCell>
-              175 USD
+              610 USD
               </TableCell>  
               <TableCell>
-              200 USD
+              480 USD
               </TableCell>  
               
           </TableCell>  
           <TableCell >
               <TableCell>
-              150 USD 
+              610 USD 
               </TableCell>  
               <TableCell>
-              175 USD
+              490 USD
               </TableCell>  
               <TableCell>
-              200 USD  
+              660 USD  
               </TableCell>  
               <TableCell>
-              225 USD
+              540 USD
               </TableCell>  
               
           </TableCell>  
@@ -237,31 +237,31 @@ export default function RateCard() {
           <TableCell sx={{fontWeight:"bold"}}>2 nights and 3 days **International Delegates Conference only</TableCell>
           <TableCell >
               <TableCell>
-              125 USD  
+              500 USD  
               </TableCell>  
               <TableCell>
-              150 USD  
+              360 USD  
               </TableCell>  
               <TableCell>
-              175 USD
+              550 USD
               </TableCell>  
               <TableCell>
-              200 USD
+              410 USD
               </TableCell>  
               
           </TableCell>  
           <TableCell >
               <TableCell>
-              150 USD 
+              550 USD 
               </TableCell>  
               <TableCell>
-              175 USD
+              420 USD
               </TableCell>  
               <TableCell>
-              200 USD  
+              600 USD  
               </TableCell>  
               <TableCell>
-              225 USD
+              470 USD
               </TableCell>  
               
           </TableCell>  
@@ -270,31 +270,31 @@ export default function RateCard() {
           <TableCell sx={{fontWeight:"bold"}}>1 nights and 2 days **International Delegates Conference only</TableCell>
           <TableCell >
               <TableCell>
-              125 USD  
+              320 USD  
               </TableCell>  
               <TableCell>
-              150 USD  
+              260 USD  
               </TableCell>  
               <TableCell>
-              175 USD
+              370 USD
               </TableCell>  
               <TableCell>
-              200 USD
+              310 USD
               </TableCell>  
               
           </TableCell>  
           <TableCell >
               <TableCell>
-              150 USD 
+              370 USD 
               </TableCell>  
               <TableCell>
-              175 USD
+              310 USD
               </TableCell>  
               <TableCell>
-              200 USD  
+              420 USD  
               </TableCell>  
               <TableCell>
-              225 USD
+              360 USD
               </TableCell>  
               
           </TableCell>  
