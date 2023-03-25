@@ -10,7 +10,6 @@ import { PhoneContext } from './Context/PhoneContext.js';
 import { NameContext } from './Context/NameContext.js';
 import { OTPPageRefreshContext } from './Context/OTPPageRefreshContext.js';
 import PaymentForm from './PaymentForm.js';
-import RateCard from './RateCard.js';
 import Footer from './Footer.js';
 import { Icon } from '@mui/material';
 

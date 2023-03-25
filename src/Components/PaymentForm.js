@@ -15,8 +15,6 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { GatewayDataContext } from "./Context/GatewayDataContext";
-import RateCard from "./RateCard";
-import RateCardWrapper from "./RateCardWrapper";
 
 const validationSchema = Yup.object().shape({
   package_type: Yup.string().required("Required"),
@@ -283,7 +281,6 @@ const PaymentForm = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={box_style}>
-        <RateCardWrapper/>
         <div style={{alignItems:"center",textAlign:"center"}}>
           <Typography sx={{color:"red"}} align="center">T&C apply</Typography>
           <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleModalClose} variant="contained">OK</Button>

@@ -8,18 +8,26 @@ import { GatewayDataContextProvider } from './Components/Context/GatewayDataCont
 import { ModeContextProvider } from './Components/Context/ModeContext';
 import PaymentStatus from './Components/PaymentStatus';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import RateCard from './Components/RateCard';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from './Components/Footer';
-
-
+import NonResidentialRateCard from './Components/NonResidentialRateCard'
+import ResidentialRateCard from './Components/ResidentialRateCard'
+import Agreement from './Components/Agreement';
+import { Outlet,Navigate } from 'react-router-dom';
 function App() {
-  
+ const [onAgreementProceedClicked , setAgreementProceedClicked] = useState(false);
+  const handleOnAgreementProceed = ()=>{
+    setAgreementProceedClicked(true);
+  }
   return <div sx={{minHeight: "100vh"}}>
        <Router>
         <Routes>
           <Route path="/paymentStatus/:transaction_id" element={<PaymentStatus />} />
-        
+          <Route path="/rate" element={<NonResidentialRateCard/>} />
+          <Route path="/rate-2" element={<ResidentialRateCard/>} />
+          
+          <Route path="/agreement" element={<Agreement onAgreementProceedClicked={handleOnAgreementProceed}/>}/>
+          
           <Route path="/" element={<> 
             <ModeContextProvider>
             <GatewayDataContextProvider>
@@ -34,8 +42,11 @@ function App() {
             </OTPPageRefreshContextProvider> 
             </GatewayDataContextProvider>
             </ModeContextProvider> 
-        </>}
+        </>
+        }
+        
         />
+      
         </Routes>
         </Router>
           
