@@ -20,6 +20,8 @@ const validationSchema = Yup.object().shape({
   state: Yup.string("Invalid state").required('Required'),
   address: Yup.string().required("Required"),
   phone: Yup.string().required("Required"),
+  institution: Yup.string().required("Required"),
+  medical_council_number: Yup.string().required("Required"),
   email: Yup.string().email("Whoops! We didn't recognise that email").required("Required"),
   
 });
@@ -145,6 +147,25 @@ const RegisterForm = (props) => {
             message="Invalid Phone number"
             handleClose={handleClosePhoneError}
           />
+          <Field
+                name="phone"
+                component={MaterialPhoneInput}
+                margin="normal"
+                error={touched.phone && Boolean(errors.phone)}
+                helperText={touched.phone && errors.phone}
+                style={{marginTop:"4.5%",marginBottom:"4.5%",textAlign:"left"}}
+
+          /> 
+          <Field
+            name="email"
+            label="Email"
+            variant="outlined"
+            margin="normal"
+            as={TextField}
+            error={touched.email && Boolean(errors.email)}
+            helperText={touched.email && errors.email}
+            fullWidth
+          />
           <Grid container spacing={2} alignItems="center">
             
             <Grid item xs={4}>
@@ -185,16 +206,16 @@ const RegisterForm = (props) => {
             
             
           <Grid item xs={8}>
-            <Field
-            name="designation"
-            label="Designation"
-            variant="outlined"
-            margin="normal"
-            as={TextField}
-            error={touched.designation && Boolean(errors.designation)}
-            helperText={touched.designation && errors.designation}
-            fullWidth
-          />
+          <Field
+              name="institution"
+              label="Institution/Hospital"
+              variant="outlined"
+              margin="normal"
+              as={TextField}
+              error={touched.institution && Boolean(errors.institution)}
+              helperText={touched.institution && errors.institution}
+              fullWidth
+            />
             </Grid>
 
             <Grid item xs={4}>
@@ -223,16 +244,16 @@ const RegisterForm = (props) => {
             
             
             <Grid item xs={8}>
-              <Field
-              name="institution"
-              label="Institution/Hospital"
-              variant="outlined"
-              margin="normal"
-              as={TextField}
-              error={touched.institution && Boolean(errors.institution)}
-              helperText={touched.institution && errors.institution}
-              fullWidth
-            />
+            <Field
+            name="address"
+            label="Address for correspondence"
+            variant="outlined"
+            margin="normal"
+            as={TextField}
+            error={touched.address && Boolean(errors.address)}
+            helperText={touched.address && errors.address}
+            fullWidth
+          />
               </Grid>
   
               <Grid item xs={4}>
@@ -299,64 +320,9 @@ const RegisterForm = (props) => {
             helperText={touched.medical_council_number && errors.medical_council_number}
             fullWidth
           />
-          <Field
-            name="membership_number"
-            label="PCOS SOCIETY/ASPIRE/ISAR Membership number:"
-            variant="outlined"
-            margin="normal"
-            as={TextField}
-            error={touched.membership_number && Boolean(errors.membership_number)}
-            helperText={touched.membership_number && errors.membership_number}
-            fullWidth
-          />
-          <Field
-            name="address"
-            label="Address for correspondence"
-            variant="outlined"
-            margin="normal"
-            as={TextField}
-            error={touched.address && Boolean(errors.address)}
-            helperText={touched.address && errors.address}
-            fullWidth
-          />
-           
-           <Field
-            name="email"
-            label="Email"
-            variant="outlined"
-            margin="normal"
-            as={TextField}
-            error={touched.email && Boolean(errors.email)}
-            helperText={touched.email && errors.email}
-            fullWidth
-          />
-           
-          <Field
-                name="phone"
-                component={MaterialPhoneInput}
-                margin="normal"
-                error={touched.phone && Boolean(errors.phone)}
-                helperText={touched.phone && errors.phone}
-                style={{marginTop:"4.5%",marginBottom:"4.5%",textAlign:"left"}}
-
-          /> 
           
-              <FormControl fullWidth margin="normal">
-              <InputLabel id="Diet">Diet</InputLabel>
-             <Select
-               id="diet"
-                value={diet}
-                label="Diet"
-                name="diet"
-                required
-                
-                onChange={handleDietChange}
-             >
-                <MenuItem value={"Vegetarian"}>Vegetarian</MenuItem>
-                <MenuItem value={"Non-vegetarian"}>Non-vegetarian</MenuItem>
-                
-             </Select>
-          </FormControl>
+           
+           
          {phoneError &&<Typography style={{fontSize:"12px",marginBottom:"5%"}}>Note: Please enter or select your country code first then enter phone number</Typography>}
           <Button type="submit" variant="contained" color="primary" disabled={!isValid } style={{backgroundColor:"#ef6223"}}>
             NEXT

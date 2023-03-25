@@ -2,9 +2,9 @@ import React,{useState,useContext,useEffect} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
+import { FormControl, FormControlLabel, FormGroup, Checkbox } from '@mui/material';
 
 import {
-  FormControl,
   InputLabel,
   Select,
   Button,
@@ -26,8 +26,9 @@ const validationSchema = Yup.object().shape({
 const initialValues = {
   package_type: "",
   member_type: "",
-  conference_type:"conference_type_1",
-  accomodation_type:"single_room"
+  conference_type:"",
+  accomodation_type:"single_room",
+  workshop_titles : []
 
 };
 function formatRupee(amount) {
@@ -81,7 +82,7 @@ const PaymentForm = () => {
         setaAmountTitle(result.data.title);
         setTotalAmount(result.data.total_amount);
         setPaymentPurpose(result.data.purpose)
-        setGatewayRedirectData({...gatewayData,title:result.data.title,amount:result.data.total_amount,purpose:result.data.purpose,values})
+        setGatewayRedirectData({...gatewayData,title:result.data.title,amount:result.data.total_amount,purpose:result.data.purpose,values,workshop_titles:checked})
         setPayNow(true);
       })
       .catch((err)=>console.log(err))
@@ -107,6 +108,29 @@ const PaymentForm = () => {
   const handleModalClose = ()=>{
     setOpenModal(false);
   }
+
+  const [checked, setChecked] = useState([]);
+  const [showChecks, setShowChecks] = useState(false);
+
+  const handleCheckChange = (event) => {
+    if (event.target.checked) {
+      // add checkbox to checked array if user checks it
+      setChecked([...checked, event.target.name]);
+    } else {
+      // remove checkbox from checked array if user unchecks it
+      setChecked(checked.filter((name) => name !== event.target.name));
+    }
+  };
+
+  const canCheckMore = checked.length < 2;
+
+  const handleResetWorkshops = ()=>{
+    setChecked([]);
+  }
+
+
+
+
   return (
     <>
         <Typography>Please determine your coverage</Typography>
@@ -123,8 +147,13 @@ const PaymentForm = () => {
           value={values.package_type}
           label="Package type"
           onChange={(e)=>{
-            if(e.target.value === "residential") setAccomodationEnabled(true);
-            else setAccomodationEnabled(false);
+            
+            if(e.target.value === "residential") {
+              setAccomodationEnabled(true);
+            }
+            else {
+              setAccomodationEnabled(false);
+            }
             setPayNow(false);
             formik.setFieldValue("package_type", e.target.value);
           }}
@@ -154,6 +183,7 @@ const PaymentForm = () => {
           value={values.accomodation_type}
           label="Accomodation Type"
           onChange={(e)=>{
+            setShowChecks(false);
             setPayNow(false);
             formik.setFieldValue("accomodation_type", e.target.value);
           }}
@@ -208,6 +238,8 @@ const PaymentForm = () => {
           value={values.conference_type}
           label="Conference Selection"
           onChange={(e)=>{
+            if(e.target.value === "conference_type_1") setShowChecks(true)
+            else setShowChecks(false);
             setPayNow(false);
             formik.setFieldValue("conference_type", e.target.value);
           }}
@@ -216,6 +248,7 @@ const PaymentForm = () => {
             id: "conference_type",
           }}
         >
+          <option value=""></option>
           <option value="conference_type_1">2 nights and 3 days - Conference + 2 Workshops</option>
           <option value="conference_type_2">2 nights and 3 days - Conference only</option>
           <option value="conference_type_3">1 nights and 2 days - Conference only</option>
@@ -237,6 +270,8 @@ const PaymentForm = () => {
           value={values.conference_type}
           label = "Conference Selection"
           onChange={(e)=>{
+            if(e.target.value === "conference_type_2" || e.target.value === "conference_type_3") setShowChecks(true)
+            else setShowChecks(false);
             setPayNow(false);
             formik.setFieldValue("conference_type", e.target.value);
           }}
@@ -245,6 +280,7 @@ const PaymentForm = () => {
             id: "conference_type",
           }}
         >
+          <option value=""></option>
           <option value="conference_type_1">Conference only</option>
           <option value="conference_type_2">Conference + 2 Workshops</option>
           <option value="conference_type_3">Post Graduate Students Conference + 2 Workshops</option>
@@ -256,22 +292,56 @@ const PaymentForm = () => {
       </FormControl>
       }
       
+      {showChecks && 
+      <>
+      <Typography sx={{marginTop:"5%",color:"#ef6223",fontWeight:"bold"}}>Workshp Titles(Attend any 2)</Typography>
+      <FormControl component="fieldset" sx={{marginTop:"2%"}}>
+      <FormGroup>
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check1')} onChange={handleCheckChange} name="check1" disabled={!canCheckMore} required/>}
+          label="Insulin Resistance in PCOS"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check2')} onChange={handleCheckChange} name="check2" disabled={!canCheckMore} required/>}
+          label="Embryo Biopsy and PGT"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check3')} onChange={handleCheckChange} name="check3" disabled={!canCheckMore} required/>}
+          label="Body Image and PCOS"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check4')} onChange={handleCheckChange} name="check4" disabled={!canCheckMore} required/>}
+          label="Ultrasound in PCOS"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check5')} onChange={handleCheckChange} name="check5" disabled={!canCheckMore} required/>}
+          label="Vitrification of Oocytes and Embryos"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check6')} onChange={handleCheckChange} name="check6" disabled={!canCheckMore} required/>}
+          label="Errors in ART"
+        />
+      </FormGroup>
+    </FormControl>
+    <Typography><button style={clickhereButton} onClick={handleResetWorkshops}>Click here</button>to reset Workshops preferences</Typography>
+    </>
+    }
       
       {
         payNow ? 
-        <><Typography >Package value : {amountTitle}</Typography>
+        <div style={{marginTop:"8%"}}><Typography >Package value : {amountTitle}</Typography>
         <Typography style={{color:"#b00020"}}>To pay : {formatRupee(totalAmount)}</Typography>
         
         <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ac2642"}}  onClick={createPaymentRequest}>
           PAY NOW
         </Button>
-        <Typography style={{marginTop:"5%"}}>Note : 5% extra processing charges may be applicable</Typography>
-        </> :
+        <Typography style={{marginTop:"5%"}}>Note : 2% extra online payments charges may be applicable</Typography>
+        </div> :
       <>
             <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ef6223"}} >
               CHECK PRICE
             </Button>
-            <Typography><button style={clickhereButton} onClick={handleOpenModal}>Click here</button> to see the detailed pricing</Typography> 
+            
       </>  
       }
       <Modal

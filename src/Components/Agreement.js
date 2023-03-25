@@ -1,19 +1,24 @@
 import { Icon, Paper, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Footer from './Footer.js'
 import NonResidentialRateCard from "./NonResidentialRateCard.js"
 import ResidentialRateCard from "./ResidentialRateCard.js"
 import { Checkbox, FormControlLabel } from '@mui/material';
 import Button from '@mui/material/Button';
+import { AgreementContext } from './Context/AgreementContext.js'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function Agreement(props) {
+    const navigate = useNavigate();
     const [isChecked, setIsChecked] = useState(false);
+    const {proceed,updateProceed} = useContext(AgreementContext);
     const handleCheckboxChange = (event) => {
         setIsChecked(event.target.checked);
     };
-    const handleAgreementProceedClick = ()=>{
-        props.onAgreementProceedClicked(true);
+    const handleAgreementProceedClick =  ()=>{
+        updateProceed(true);
+        navigate("/");    
     }
     return (
     <div style={{alignItems:"center",display:"flex",justifyContent:"center",flexDirection:"column"}}>

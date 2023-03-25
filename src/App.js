@@ -8,48 +8,38 @@ import { GatewayDataContextProvider } from './Components/Context/GatewayDataCont
 import { ModeContextProvider } from './Components/Context/ModeContext';
 import PaymentStatus from './Components/PaymentStatus';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import Footer from './Components/Footer';
-import NonResidentialRateCard from './Components/NonResidentialRateCard'
-import ResidentialRateCard from './Components/ResidentialRateCard'
 import Agreement from './Components/Agreement';
-import { Outlet,Navigate } from 'react-router-dom';
+import { AgreementContextProvider } from './Components/Context/AgreementContext';
+import ProtectedRoutes from './Components/ProtectedRoutes';
 function App() {
- const [onAgreementProceedClicked , setAgreementProceedClicked] = useState(false);
-  const handleOnAgreementProceed = ()=>{
-    setAgreementProceedClicked(true);
-  }
   return <div sx={{minHeight: "100vh"}}>
+       <AgreementContextProvider>
        <Router>
         <Routes>
           <Route path="/paymentStatus/:transaction_id" element={<PaymentStatus />} />
-          <Route path="/rate" element={<NonResidentialRateCard/>} />
-          <Route path="/rate-2" element={<ResidentialRateCard/>} />
-          
-          <Route path="/agreement" element={<Agreement onAgreementProceedClicked={handleOnAgreementProceed}/>}/>
-          
-          <Route path="/" element={<> 
-            <ModeContextProvider>
-            <GatewayDataContextProvider>
-            <OTPPageRefreshContextProvider>
-            <NameContextProvider>
-            <PhoneContextProvider>
-            <EmailContextProvider>
+          <Route path="/agreement" element={<Agreement/>}/>
+          <Route element={<ProtectedRoutes/>}>
+            <Route path="/" exact element={<> 
+              <ModeContextProvider>
+              <GatewayDataContextProvider>
+              <OTPPageRefreshContextProvider>
+              <NameContextProvider>
+              <PhoneContextProvider>
+              <EmailContextProvider>
                 <Register />
-            </EmailContextProvider>
-            </PhoneContextProvider>
-            </NameContextProvider>
-            </OTPPageRefreshContextProvider> 
-            </GatewayDataContextProvider>
-            </ModeContextProvider> 
-        </>
-        }
-        
+             </EmailContextProvider>
+              </PhoneContextProvider>
+              </NameContextProvider>
+              </OTPPageRefreshContextProvider> 
+              </GatewayDataContextProvider>
+              </ModeContextProvider> 
+           </>
+         }
         />
-      
+        </Route>
         </Routes>
         </Router>
-          
+        </AgreementContextProvider>
         </div>
 }
 
