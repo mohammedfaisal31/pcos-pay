@@ -1,8 +1,8 @@
 import React,{useState,useContext,useEffect} from "react";
-import { useFormik } from "formik";
+import { Field, useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
-import { FormControl, FormControlLabel, FormGroup, Checkbox } from '@mui/material';
+import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField } from '@mui/material';
 
 import {
   InputLabel,
@@ -19,7 +19,7 @@ import { GatewayDataContext } from "./Context/GatewayDataContext";
 const validationSchema = Yup.object().shape({
   package_type: Yup.string().required("Required"),
   member_type: Yup.string().required("Required"),
-  
+ membership_number: Yup.string().matches(/^[a-zA-Z]{2}-\d{3,4}$/,"Please enter a valid membership number").required("Membership number is required")
   
 });
 
@@ -28,7 +28,8 @@ const initialValues = {
   member_type: "",
   conference_type:"",
   accomodation_type:"single_room",
-  workshop_titles : []
+  workshop_titles : [],
+  membership_number:""
 
 };
 function formatRupee(amount) {
@@ -111,7 +112,7 @@ const PaymentForm = () => {
 
   const [checked, setChecked] = useState([]);
   const [showChecks, setShowChecks] = useState(false);
-
+  const [showMemNum, setShowMemNum] = useState(false);
   const handleCheckChange = (event) => {
     if (event.target.checked) {
       // add checkbox to checked array if user checks it
@@ -211,6 +212,8 @@ const PaymentForm = () => {
           value={values.member_type}
           label="Membership Type"
           onChange={(e)=>{
+            if(e.target.value === "member") setShowMemNum(true);
+            else setShowMemNum(false);
             setPayNow(false);
             formik.setFieldValue("member_type", e.target.value);
           }}
@@ -227,6 +230,31 @@ const PaymentForm = () => {
           <FormHelperText>{errors.member_type}</FormHelperText>
         )}
       </FormControl>
+
+      {showMemNum &&
+      <FormControl
+              fullWidth
+              margin="normal"
+              error={touched.membership_number && Boolean(errors.membership_number)}
+            
+          >
+      <TextField
+        value={values.membership_number}
+        label="Membership Number"
+        onChange={(e)=>{
+          formik.setFieldValue("membership_number", e.target.value);
+        }}
+        variant="outlined"
+        inputProps={{
+          name: "membership_number",
+          id: "membership_number",
+        }}
+      />
+      {touched.membership_number && errors.membership_number && (
+          <FormHelperText>{errors.membership_number}</FormHelperText>
+        )}
+    </FormControl>
+  }
       {accomodationEnabled? <FormControl
         fullWidth
         margin="normal"
@@ -339,7 +367,7 @@ const PaymentForm = () => {
         </div> :
       <>
             <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ef6223"}} >
-              CHECK PRICE
+              SUBMIT
             </Button>
             
       </>  
