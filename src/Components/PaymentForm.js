@@ -148,7 +148,8 @@ const PaymentForm = () => {
           value={values.package_type}
           label="Package type"
           onChange={(e)=>{
-            
+            formik.resetForm();
+            setShowChecks(false);
             if(e.target.value === "residential") {
               setAccomodationEnabled(true);
             }
