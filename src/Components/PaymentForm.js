@@ -150,6 +150,7 @@ const PaymentForm = () => {
           onChange={(e)=>{
             formik.resetForm();
             setShowChecks(false);
+            handleResetWorkshops();
             if(e.target.value === "residential") {
               setAccomodationEnabled(true);
             }
