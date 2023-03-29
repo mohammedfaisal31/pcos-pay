@@ -19,8 +19,10 @@ import { GatewayDataContext } from "./Context/GatewayDataContext";
 const validationSchema = Yup.object().shape({
   package_type: Yup.string().required("Required"),
   member_type: Yup.string().required("Required"),
- membership_number: Yup.string().matches(/^[a-zA-Z]{2}-\d{3,4}$/,"Please enter a valid membership number").required("Membership number is required")
-  
+  membership_number: Yup.string().when('member_type', (member_type,schema)=>{
+    if(member_type === "member")  schema.matches(/^[a-zA-Z]{2}-\d{3,4}$/,"Please enter a valid membership number").required("Membership number is required") 
+
+ }),
 });
 
 const initialValues = {
@@ -29,7 +31,7 @@ const initialValues = {
   conference_type:"",
   accomodation_type:"single_room",
   workshop_titles : [],
-  membership_number:""
+  membership_number:"LM-000"
 
 };
 function formatRupee(amount) {
@@ -246,6 +248,7 @@ const PaymentForm = () => {
         onChange={(e)=>{
           formik.setFieldValue("membership_number", e.target.value);
         }}
+        defaultValue="ab-000"
         variant="outlined"
         inputProps={{
           name: "membership_number",
