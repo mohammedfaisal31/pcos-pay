@@ -368,7 +368,7 @@ const PaymentForm = () => {
         <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ac2642"}}  onClick={createPaymentRequest}>
           PAY NOW
         </Button>
-        <Typography style={{marginTop:"5%"}}>Note : 2% extra online payments charges may be applicable</Typography>
+        <Typography style={{marginTop:"5%"}}>Note : 3.64% extra online payments charges may be applicable</Typography>
         </div> :
       <>
             <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ef6223"}} >

@@ -65,7 +65,7 @@ export default function Agreement(props) {
     
     return (
     <>
-    <div style={{alignItems:"center",display:"flex",justifyContent:"center",flexDirection:"column"}}>
+    <div style={{alignItems:"center",display:"flex",justifyContent:"center",flexDirection:"column",marginBottom:"3%"}}>
         <h2 style={{textAlign:"center",marginTop:"2%"}}>"There is more to PCOS and ART... Beyond the obvious”</h2>
         <h3 variant='h5' style={{textAlign:"center",marginTop:"2%",marginBottom:"2%"}}>Welcome, Please go through the packages and click proceed below</h3>
           
@@ -87,7 +87,12 @@ export default function Agreement(props) {
             }
             label="I agree to the terms and conditions"
             />
-          <Button sx={{backgroundColor:"#ac2642"}} variant="contained" disabled={!isChecked} onClick={handleAgreementProceedClick}>PROCEED</Button>
+          <Button sx={{
+                        backgroundColor:"#ac2642",
+                        '&:hover': {
+                            backgroundColor: '#d85165',
+                          }
+                }} variant="contained" disabled={!isChecked} onClick={handleAgreementProceedClick}>PROCEED</Button>
             </div >
         </Paper>
        

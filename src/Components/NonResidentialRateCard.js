@@ -11,50 +11,45 @@ import { Typography } from '@mui/material';
 export default function RateCard() {
   return (
     <div style={{padding:"1%"}}>
-    
+    <Typography style={{backgroundColor:"#9d3d44",fontSize:32,color:"#fff",textAlign:"center",borderRadius:"2px",marginBottom:"0.2%"}}>Non Residential package</Typography>
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
-          <TableRow sx={{backgroundColor:"#9d3d44"}}>
-            <TableCell/>
-            <TableCell align="center" sx={{fontSize:25,color:"#fff"}}>Non-residential package</TableCell>
-            <TableCell/>
-          </TableRow>
           <TableRow sx={{backgroundColor:"#7D2D33"}}>
-            <TableCell></TableCell>
-            <TableCell align="center" sx={{color:"#fff",fontFamily:'"Times New Roman", serif',fontWeight:"bold"}}>PCOS/ISAR/ASPIRE Members</TableCell>
-            <TableCell align="center" sx={{color:"#fff",fontFamily:'"Times New Roman", serif',fontWeight:"bold"}}>Non Member</TableCell>
+            <TableCell sx={{ border: '1px solid black' }}></TableCell>
+            <TableCell align="center" sx={{color:"#fff",fontFamily:'"Times New Roman", serif',fontWeight:"bold", border: '1px solid black'}}>PCOS/ISAR/ASPIRE Members</TableCell>
+            <TableCell align="center" sx={{color:"#fff",fontFamily:'"Times New Roman", serif',fontWeight:"bold", border: '1px solid black'}}>Non Member</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow sx={{backgroundColor:"#E9DDDA"}}>
-          <TableCell sx={{fontWeight:"bold"}}>All figures in INR for Indian Delegates and USD for international Delegates</TableCell>
-          <TableCell >
-              <TableCell>
+          <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>All figures in INR for Indian Delegates and USD for international Delegates</TableCell>
+          <TableCell sx={{ border: '1px solid black' }}>
+              <TableCell sx={{color:"#585656",fontWeight:"bold"}}>
               Till 15th April  
               </TableCell>  
-              <TableCell>
+              <TableCell sx={{color:"#585656",fontWeight:"bold"}}>
               16th April to 15th May  
-              </TableCell>  
-              <TableCell>
+              </TableCell >  
+              <TableCell sx={{color:"#585656",fontWeight:"bold"}}>
               After 15th May  
               </TableCell>  
-              <TableCell>
+              <TableCell sx={{color:"#585656",fontWeight:"bold"}}>
               After 7th June and Spot
               </TableCell>  
               
-          </TableCell>  
-          <TableCell >
-              <TableCell>
+          </TableCell >  
+          <TableCell sx={{ border: '1px solid black' }}>
+              <TableCell sx={{color:"#585656",fontWeight:"bold"}}>
               Till 15th April  
               </TableCell>  
-              <TableCell>
+              <TableCell sx={{color:"#585656",fontWeight:"bold"}}>
               16th April to 15th May  
               </TableCell>  
-              <TableCell>
+              <TableCell sx={{color:"#585656",fontWeight:"bold"}}>
               After 15th May  
               </TableCell>  
-              <TableCell>
+              <TableCell sx={{color:"#585656",fontWeight:"bold"}}>
               After 7th June and Spot
               </TableCell>  
               
@@ -62,8 +57,8 @@ export default function RateCard() {
           </TableRow>
 
           <TableRow sx={{backgroundColor:"#DAC4BF"}}>
-          <TableCell sx={{fontWeight:"bold"}}>*Conference + 2 Workshops</TableCell>
-          <TableCell >
+          <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>*Conference + 2 Workshops</TableCell>
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               13500 + 18% GST  
               </TableCell>  
@@ -78,7 +73,7 @@ export default function RateCard() {
               </TableCell>  
               
           </TableCell>  
-          <TableCell >
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               14500 + 18% GST  
               </TableCell>  
@@ -96,8 +91,8 @@ export default function RateCard() {
           </TableRow>
 
           <TableRow sx={{backgroundColor:"#E9DDDA"}}>
-          <TableCell sx={{fontWeight:"bold"}}>**Conference only</TableCell>
-          <TableCell >
+          <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>**Conference only</TableCell>
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               8500 + 18% GST  
               </TableCell>  
@@ -112,7 +107,7 @@ export default function RateCard() {
               </TableCell>  
               
           </TableCell>  
-          <TableCell >
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               9500 + 18% GST  
               </TableCell>  
@@ -129,8 +124,8 @@ export default function RateCard() {
           </TableCell>  
           </TableRow>
           <TableRow sx={{backgroundColor:"#DAC4BF"}}>
-          <TableCell sx={{fontWeight:"bold"}}>***Post Graduate Students Conference + 2 Workshops</TableCell>
-          <TableCell >
+          <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>***Post Graduate Students Conference + 2 Workshops</TableCell>
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               8000 + 18% GST  
               </TableCell>  
@@ -145,7 +140,7 @@ export default function RateCard() {
               </TableCell>  
               
           </TableCell>  
-          <TableCell >
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               9000 + 18% GST  
               </TableCell>  
@@ -162,13 +157,13 @@ export default function RateCard() {
           </TableCell>  
           </TableRow>
         <TableRow sx={{backgroundColor:"#7D2D33"}}>
-          <TableCell/>
+          <TableCell />
           <TableCell sx={{textAlign:"center",color:"#fff"}}>Inclusive of GST for International Delegates in USD</TableCell>
           <TableCell/>
         </TableRow>
         <TableRow sx={{backgroundColor:"#E9DDDA"}}>
-          <TableCell sx={{fontWeight:"bold"}}>*International Delegates Conference + 2 Workshops</TableCell>
-          <TableCell >
+          <TableCell sx={{fontWeight:"bold",border: '1px solid black' }}>*International Delegates Conference + 2 Workshops</TableCell>
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               200 USD  
               </TableCell>  
@@ -183,7 +178,7 @@ export default function RateCard() {
               </TableCell>  
               
           </TableCell>  
-          <TableCell >
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               225 USD 
               </TableCell>  
@@ -200,8 +195,8 @@ export default function RateCard() {
           </TableCell>  
           </TableRow>
           <TableRow sx={{backgroundColor:"#DAC4BF"}}>
-          <TableCell sx={{fontWeight:"bold"}}>**International Delegates Conference only</TableCell>
-          <TableCell >
+          <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>**International Delegates Conference only</TableCell>
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               125 USD  
               </TableCell>  
@@ -216,7 +211,7 @@ export default function RateCard() {
               </TableCell>  
               
           </TableCell>  
-          <TableCell >
+          <TableCell sx={{ border: '1px solid black' }}>
               <TableCell>
               150 USD 
               </TableCell>  

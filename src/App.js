@@ -11,11 +11,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Agreement from './Components/Agreement';
 import { AgreementContextProvider } from './Components/Context/AgreementContext';
 import ProtectedRoutes from './Components/ProtectedRoutes';
+import AdminPanel from './Components/AdminPanel';
 function App() {
   return <div sx={{minHeight: "100vh"}}>
        <AgreementContextProvider>
        <Router>
         <Routes>
+          <Route path="/admin" element={<AdminPanel/>}/>
           <Route path="/paymentStatus/:transaction_id" element={<PaymentStatus />} />
           <Route path="/agreement" element={<Agreement/>}/>
           <Route element={<ProtectedRoutes/>}>
