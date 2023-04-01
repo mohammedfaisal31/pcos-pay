@@ -2,7 +2,8 @@ import React,{useState,useContext,useEffect} from "react";
 import { Field, useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
-import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField } from '@mui/material';
+import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
 
 import {
   InputLabel,
@@ -15,6 +16,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { GatewayDataContext } from "./Context/GatewayDataContext";
+import AgreementWrapper from "./AgreementWrapper";
 
 const validationSchema = Yup.object().shape({
   package_type: Yup.string().required("Required"),
@@ -380,23 +382,23 @@ const PaymentForm = () => {
             
       </>  
       }
-      <Modal
+      <Typography><button style={clickhereButton} onClick={handleOpenModal}>Click here</button>to view the rate card</Typography>
+      
+    </form>
+    <Dialog
         open={openModal}
         onClose={handleModalClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
       >
-        <Box sx={box_style}>
-        <div style={{alignItems:"center",textAlign:"center"}}>
-          <Typography sx={{color:"red"}} align="center">T&C apply</Typography>
+        <DialogContent>
+        <Box sx={{padding:"5%",width:1025}}>
+           
+           <AgreementWrapper/>
           <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleModalClose} variant="contained">OK</Button>
-        </div>
         </Box>
+        </DialogContent>
         
         
-        
-      </Modal>
-    </form>
+      </Dialog>
     </>
   );
 };
