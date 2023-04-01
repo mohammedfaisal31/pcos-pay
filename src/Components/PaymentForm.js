@@ -19,19 +19,22 @@ import { GatewayDataContext } from "./Context/GatewayDataContext";
 const validationSchema = Yup.object().shape({
   package_type: Yup.string().required("Required"),
   member_type: Yup.string().required("Required"),
-  membership_number: Yup.string().when('member_type', (member_type,schema)=>{
-    if(member_type === "member")  schema.matches(/^[a-zA-Z]{2}-\d{3,4}$/,"Please enter a valid membership number").required("Membership number is required") 
+  membership_number: Yup.string().when("member_type", {
+    is: "member"  ,
+    then: ()=>  Yup.string().matches(/^[a-zA-Z]{2}-\d{3,4}$/,"Please enter a valid membership number").required("Membership number is required") ,
+    otherwise: ()=> Yup.string().notRequired(),
+  }),
+    
 
- }),
 });
-
+// if(member_type === "member")  schema.matches(/^[a-zA-Z]{2}-\d{3,4}$/,"Please enter a valid membership number").required("Membership number is required") 
 const initialValues = {
   package_type: "",
   member_type: "",
   conference_type:"",
   accomodation_type:"single_room",
   workshop_titles : [],
-  membership_number:"LM-000"
+  membership_number:""
 
 };
 function formatRupee(amount) {
@@ -368,7 +371,7 @@ const PaymentForm = () => {
         <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ac2642"}}  onClick={createPaymentRequest}>
           PAY NOW
         </Button>
-        <Typography style={{marginTop:"5%"}}>Note : 3.64% extra online payments charges may be applicable</Typography>
+        <Typography style={{marginTop:"5%"}}>Note : 3.64% online payments charges are applicable</Typography>
         </div> :
       <>
             <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ef6223"}} >

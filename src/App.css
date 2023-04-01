@@ -51,3 +51,61 @@
   pointer-events: auto;
   background-color: #c0bcba !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.TableContainer {
+  margin-bottom: 1rem;
+}
+
+.Table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.TableHead {
+  background-color: #d84a5e;
+}
+
+.TableRow {
+  background-color: #e9dddada;
+}
+
+.TableCell {
+  padding: 0.5rem;
+  border: 1px solid black;
+}
+
+.TableCell--header {
+  background-color: #ac2642;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  border-left: 3px solid #9d3d44;
+}
+
+.TableCell--figure {
+  font-weight: bold;
+  width: 10%;
+  border: 1px solid black;
+}
+
+.TableCell--highlight {
+  background-color: #dac4bf;
+}
+
+@media (max-width: 768px) {
+  .TableCell--header {
+    font-size: 1.25rem;
+  }
+}
