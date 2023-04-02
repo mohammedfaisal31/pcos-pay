@@ -57,8 +57,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"14500 + 18% GST",c2:"15500 + 18% GST",c3:"16500 + 18% GST",c4:"18000 + 18% GST"}}/>
-                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"13500 + 18% GST",c2:"14500 + 18% GST",c3:"15500 + 18% GST",c4:"17000 + 18% GST"}}/>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"14500 + 18% GST",c2:"15500 + 18% GST",c3:"16500 + 18% GST",c4:"18000 + 18% GST",accomodation1:" Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"13500 + 18% GST",c2:"14500 + 18% GST",c3:"15500 + 18% GST",c4:"17000 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
                       </Stack>
                       </AccordionDetails>
                     </Accordion >
@@ -68,8 +68,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"9500 + 18% GST",c2:"10500 + 18% GST",c3:"11500 + 18% GST",c4:"13000 + 18% GST"}}/>
-                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"8500 + 18% GST",c2:"9500 + 18% GST",c3:"10500 + 18% GST",c4:"12000 + 18% GST"}}/>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"9500 + 18% GST",c2:"10500 + 18% GST",c3:"11500 + 18% GST",c4:"13000 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"8500 + 18% GST",c2:"9500 + 18% GST",c3:"10500 + 18% GST",c4:"12000 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
                       </Stack>
                       </AccordionDetails>
                     </Accordion>
@@ -79,8 +79,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"9000 + 18% GST",c2:"10000 + 18% GST",c3:"11000 + 18% GST",c4:"12500 + 18% GST"}}/>
-                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"8000 + 18% GST",c2:"9000 + 18% GST",c3:"10000 + 18% GST",c4:"11500 + 18% GST"}}/>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"9000 + 18% GST",c2:"10000 + 18% GST",c3:"11000 + 18% GST",c4:"12500 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"8000 + 18% GST",c2:"9000 + 18% GST",c3:"10000 + 18% GST",c4:"11500 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
                       </Stack>
           </AccordionDetails>
       </Accordion>
@@ -112,8 +112,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"225 USD",c2:"250 USD",c3:"275 USD",c4:"300 USD"}}/>
-                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"200 USD",c2:"225 USD",c3:"250 USD",c4:"275 USD"}}/>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"225 USD",c2:"250 USD",c3:"275 USD",c4:"300 USD",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"200 USD",c2:"225 USD",c3:"250 USD",c4:"275 USD",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
                       </Stack>
                       </AccordionDetails>
                     </Accordion>
@@ -123,8 +123,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"150 USD",c2:"175 USD",c3:"200 USD",c4:"225 USD"}}/>
-                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"125 USD",c2:"150 USD",c3:"175 USD",c4:"200 USD"}}/>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"150 USD",c2:"175 USD",c3:"200 USD",c4:"225 USD",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"125 USD",c2:"150 USD",c3:"175 USD",c4:"200 USD",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
                       </Stack>
                       </AccordionDetails>
                     </Accordion>

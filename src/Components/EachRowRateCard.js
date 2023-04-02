@@ -26,16 +26,16 @@ export default function EachRowRateCard(props) {
                           <TableBody>
                           <TableRow sx={{backgroundColor:"#E9DDDA"}}>
                           <TableCell sx={{color:"#585656",fontWeight:"bold",border:" 1px solid black",borderLeft:"1px solid black" }}>
-                            Till 15th April   {props.options.accomodation1}
+                            {props.options.accomodation1}
                          </TableCell>  
                         <TableCell sx={{color:"#585656",fontWeight:"bold",border:" 1px solid black"}}>
-                            16th April to 15th May  {props.options.accomodation2}
+                            {props.options.accomodation2}
                         </TableCell >  
                         <TableCell sx={{color:"#585656",fontWeight:"bold",border:" 1px solid black"}}>
-                            After 15th May   {props.options.accomodation1}
+                            {props.options.accomodation3}
                          </TableCell>  
                         <TableCell sx={{color:"#585656",fontWeight:"bold",width:"11.25",border: '1px solid black'}}>
-                            After 7th June and Spot  {props.options.accomodation2}
+                            {props.options.accomodation4}
                         </TableCell>  
                         </TableRow>
                         <TableRow sx={{backgroundColor:"#DAC4BF"}}>
