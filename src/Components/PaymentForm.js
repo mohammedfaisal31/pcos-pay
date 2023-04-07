@@ -137,7 +137,7 @@ const PaymentForm = () => {
   }
 
 
-
+ 
 
   return (
     <>
@@ -388,13 +388,21 @@ const PaymentForm = () => {
     <Dialog
         open={openModal}
         onClose={handleModalClose}
+        PaperProps={{
+          style: {
+            width: '80%',
+            maxWidth: 'none',
+          },
+        }}
+       
       >
-        <DialogContent>
-        <Box sx={{padding:"5%",width:1025}}>
+        <DialogTitle>Pricing</DialogTitle>
+        <DialogContent >
+        <div >
            
            <AgreementWrapper/>
           <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleModalClose} variant="contained">OK</Button>
-        </Box>
+        </div>
         </DialogContent>
         
         

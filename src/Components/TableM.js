@@ -123,11 +123,74 @@ useEffect(() => {
     return true;
   });
   const handleExport = () => {
-    const worksheet = XLSX.utils.json_to_sheet(data);
+    const worksheet = XLSX.utils.json_to_sheet(formattedData(filterData(filteredData,searchTerm,searchBy),columnMapping));
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Table Data');
     XLSX.writeFile(workbook, 'table-data.xlsx');
   };
+
+  const columnMapping = {
+    "accomodation_type": "Accomodation Type",
+    "amount": "Amount",
+    "conference_type": "Conference Type",
+    "date_of_transaction": "Date Of Transaction",
+    "member_type": "Member Type",
+    "package_type": "Package Type",
+    "paymentID": "Payment ID",
+    "paymentStatus": "Payment Status",
+    "payment_purpose": "Payment Purpose",
+    "time_of_transaction": "Time Of Transaction",
+    "transaction_id": "Transaction Id",
+    "user_address": "Address",
+    "user_age": "Age",
+    "user_city": "City",
+    "user_designation": "Designation",
+    "user_diet": "Diet",
+    "user_email": "Email",
+    "user_institution": "Institution",
+    "user_medical_council_number": "Medical Council Number",
+    "user_membership_number": "Membership Number",
+    "user_name": "Name",
+    "user_phone": "Phone",
+    "user_pincode": "Pincode",
+    "user_salutation": "Salutation",
+    "user_sex": "Sex",
+    "user_state": "State",
+    "workshop_titles": "Workshop Titles"
+  }
+  
+  const formattedData = (data,columnMapping)=>{
+    if (!Array.isArray(data) || !data.length) {
+      return [];
+    }
+  
+    return data.map(row => {
+      const newRow = {};
+      row["conference_type"] = row["payment_purpose"].replace("Opted for ","")
+      let workshop_titles =  JSON.parse(row["workshop_titles"])
+      //console.log(workshop_titles)
+      for(let i=0;i<workshop_titles.length;i++){
+        console.log(workshop_titles[i])
+        if(workshop_titles[i] === "check1") workshop_titles[i] = "Insulin Resistance in PCOS"
+        else if(workshop_titles[i] === "check2") workshop_titles[i] = "Embryo Biopsy and PGT"
+        else if(workshop_titles[i] === "check3") workshop_titles[i] = "Body Image and PCOS"
+        else if(workshop_titles[i] === "check4") workshop_titles[i] = "Ultrasound in PCOS"
+        else if(workshop_titles[i] === "check5") workshop_titles[i] = "Vitrification of Oocytes and Embryos"
+        else if(workshop_titles[i] === "check6") workshop_titles[i] = "Errors in ART"
+        else continue
+        
+      }
+      //console.log(JSON.stringify(workshop_titles))
+      row["workshop_titles"] = JSON.stringify(workshop_titles);
+      for (const key in row) {
+        newRow[columnMapping[key]] = row[key];
+        
+      }
+      return newRow;
+    });
+      
+    
+  }
 
   return (
     <Paper elevation={5} sx={{padding:"5%",height:"100%",backgroundColor:"#c6ccca"}}>
@@ -135,7 +198,7 @@ useEffect(() => {
     <TableContainer component={Paper} sx={{padding:"2%"}}>
       <Typography sx={{textAlign:"center",color:"#fff",backgroundColor:"#03a36e",marginBottom:"2%",height:"7vh",fontSize:35}}>Admin Panel</Typography>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-      <Toolbar sx={{marginRight:"30%"}}>
+      <Toolbar sx={{marginRight:"20%"}}>
         <FilterList />
         <Grid container spacing={2}>
          <Grid item>
@@ -192,10 +255,10 @@ useEffect(() => {
         <MenuItem value="transaction_id">Transaction ID</MenuItem>
       </Select>
       </FormControl>
-      <Stack sx={{marginLeft:"3%",textAlign:"center"}}>
+      <Stack sx={{marginLeft:"5%",textAlign:"center"}}>
         <Typography >Export</Typography>
         <VerticalAlignBottomIcon sx={{backgroundColor:"#03a36e",color:"#fff",borderRadius:"2rem",width:"75px",textAlign:"center",alignItems:"center"}} onClick={handleExport}/>
-      </Stack>
+      </Stack> 
       
       
       </div>
@@ -242,11 +305,14 @@ useEffect(() => {
               row.paymentStatus === "pending" ?
               
               <Stack>
-              <PendingIcon sx={{color:"yellow"}}/>
+              <PendingIcon sx={{color:"orange"}}/>
               <Typography>Pending</Typography>
-            </Stack>
+             </Stack>
               :
-              <>N/A</>
+              <Stack>
+              <PendingIcon sx={{color:"orange"}}/>
+              <Typography>Pending</Typography>
+             </Stack>
             }
           </IconButton>
         </TableCell>
@@ -258,9 +324,17 @@ useEffect(() => {
         <UserDetailsModal openModal={openDetailsModal} closeModal={handleCloseDetailsModal} data={selectedRowData} />
         
         <TableCell>
-          <IconButton color="secondary" aria-label="edit">
-            <ForwardToInboxIcon onClick={()=>handleSendMail(row)}/>
-          </IconButton>
+          {
+            row.paymentStatus === "success" ?
+            <IconButton color="secondary" aria-label="edit">
+              <ForwardToInboxIcon onClick={()=>handleSendMail(row)}/>
+            </IconButton> :
+            <IconButton sx={{color:"grey"}} aria-label="edit">
+              <ForwardToInboxIcon />
+            </IconButton> 
+          
+          }
+          
         </TableCell>
         
         

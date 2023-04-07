@@ -16,6 +16,7 @@ import ResidentialRateCardPhone from './Components/ResidentialRateCardPhone';
 import AgreementPhone from './Components/AgreementPhone';
 import AgreementWrapper from './Components/AgreementWrapper';
 import TableM from './Components/TableM';
+
 function App() {
   return <div sx={{minHeight: "100vh"}}>
        <AgreementContextProvider>
@@ -23,7 +24,6 @@ function App() {
         <Routes>
           <Route path="/admin" element={<TableM/>}/>
           <Route path="/phone" element={<AgreementPhone/>}/>
-          <Route path="/admin" element={<AdminPanel/>}/>
           <Route path="/paymentStatus/:transaction_id" element={<PaymentStatus />} />
           <Route path="/agreement" element={<AgreementWrapper/>}/>
           <Route element={<ProtectedRoutes/>}>
