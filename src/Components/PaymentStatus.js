@@ -48,7 +48,7 @@ export default function PaymentStatus() {
             
             <SuccessSnackBar
                 open={emailSent}
-                message="An invoice has been sent to your email"
+                message="Payment receipt has been sent to your email"
                 handleClose={handleInvoiceSentAlertClose}
   />
         </div>

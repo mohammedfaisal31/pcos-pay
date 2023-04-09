@@ -25,6 +25,7 @@ const TableM = () => {
   const [paymentStatusFilter, setPaymentStatusFilter] = useState('all');
   const [membershipTypeFilter, setMembershipTypeFilter] = useState('all');
   const [packageTypeFilter, setPackageTypeFilter] = useState('all');
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState('all');
   
   const handlePaymentStatusFilterChange = (event) => {
     setPaymentStatusFilter(event.target.value);
@@ -39,6 +40,9 @@ const TableM = () => {
     setPackageTypeFilter(event.target.value);
   };
   
+  const handlePaymentMethodFilter = (event) => {
+    setPaymentMethodFilter(event.target.value);
+  };
   
   
   
@@ -100,13 +104,16 @@ const TableM = () => {
   
 
 const [sendMailRowData, setSendMailRowData] = useState({});
+const [sendMailRowDataCount, setSendMailRowDataCount] = useState(0);
+
 const handleSendMail =  ((rowData)=>{
-  setSendMailRowData(rowData) 
+  setSendMailRowData(rowData)
+  setSendMailRowDataCount(sendMailRowDataCount+1); 
 })
 useEffect(() => {
   console.log(sendMailRowData);
   window.open(`https://pcos-pay.vercel.app/paymentStatus/${sendMailRowData.transaction_id}`, '_blank')
-}, [sendMailRowData])
+}, [sendMailRowData,sendMailRowDataCount])
 
 
   const filteredData = data.filter((row) => {
@@ -119,7 +126,9 @@ useEffect(() => {
     if (packageTypeFilter !== 'all' && row.package_type !== packageTypeFilter) {
       return false;
     }
-    
+    if (paymentMethodFilter !== 'all' && row.payment_method !== paymentMethodFilter) {
+      return false;
+    }
     return true;
   });
   const handleExport = () => {
@@ -223,7 +232,11 @@ useEffect(() => {
         </select>
         </Grid>
         <Grid item>
-          
+        <select value={paymentMethodFilter} onChange={handlePaymentMethodFilter}>
+          <option value="all">All Payment Methods</option>
+          <option value="online">Online payments</option>
+          <option value="RTGS/NEFT/Cheque/DD">RTGS/NEFT/Cheque/DD payments</option>
+        </select>
         </Grid>
         </Grid>
       </Toolbar>
@@ -272,6 +285,7 @@ useEffect(() => {
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Membership Type</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Package Type</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Payment Status</TableCell>
+                <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Payment Method</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Edit Full Details</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Send Email Receipt</TableCell>
               </TableRow>
@@ -316,6 +330,7 @@ useEffect(() => {
             }
           </IconButton>
         </TableCell>
+        <TableCell>{row.payment_method}</TableCell>
         <TableCell>
           <IconButton color="secondary" aria-label="edit">
             <EditIcon onClick={()=>handleFullDetailsClick(row)}/>

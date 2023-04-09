@@ -2,8 +2,11 @@ import React,{useState,useContext,useEffect} from "react";
 import { Field, useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
-import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent } from '@mui/material';
+import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
+import Swal from 'sweetalert';
+import { Table, TableBody, TableHead, TableRow, TableCell } from '@mui/material';
+
 
 import {
   InputLabel,
@@ -23,7 +26,7 @@ const validationSchema = Yup.object().shape({
   member_type: Yup.string().required("Required"),
   membership_number: Yup.string().when("member_type", {
     is: "member"  ,
-    then: ()=>  Yup.string().matches(/^[a-zA-Z]{2}-\d{3,4}$/,"Please enter a valid membership number").required("Membership number is required") ,
+    then: ()=>  Yup.string().matches(/^(PM|pm|LM|lm|AM|am)-\d{4}$/i,"Please enter a valid membership number").required("Membership number is required") ,
     otherwise: ()=> Yup.string().notRequired(),
   }),
     
@@ -39,6 +42,7 @@ const initialValues = {
   membership_number:""
 
 };
+
 function formatRupee(amount) {
   return amount.toLocaleString('en-IN', {
     style: 'currency',
@@ -80,6 +84,12 @@ const PaymentForm = () => {
   
   const {gatewayData, updateGatewayData} = useContext(GatewayDataContext);
   const[gatewayRedirectData, setGatewayRedirectData] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
+
+  const [showOfflinePaymentModal, setOfflinePaymentModal] = useState(false);
+  const [offlinePaymentMethod, setOfflinePaymentMethod] = useState("");
+  const [openOfflineBackdrop, setOpenOfflineBackdrop] = useState(false);
+  
 
   const formik = useFormik({
     initialValues,
@@ -97,15 +107,33 @@ const PaymentForm = () => {
     },
   });
   const createPaymentRequest = ()=>{
-    axios.post('https://kisargo.ml/api/createPayment',gatewayRedirectData)
-    .then((res)=>{
-        console.log(res.data);
-        if(res.data.success){
-          window.location.href = res.data.payment_request.longurl;
+    showPaymentPrompt()
+    .then((result)=>{
+        if(result === "online"){
+          axios.post('https://kisargo.ml/api/createPayment',gatewayRedirectData)
+          .then((res)=>{
+              console.log(res.data);
+              if(res.data.success){
+                window.location.href = res.data.payment_request.longurl;
+              }
+            
+          })
+          .catch((err)=>console.log(err))
         }
-      
-    })
-    .catch((err)=>console.log(err))
+        else{
+          setOfflinePaymentModal(true);
+          setOpenOfflineBackdrop(true)
+          axios.post('https://kisargo.ml/api/createOfflinePayment',gatewayRedirectData)
+          .then((res)=>{
+              console.log(res.data);
+              if(res.data.success){
+                setOpenOfflineBackdrop(false);
+              }
+            
+          })
+        }
+    });
+    
   }
   const { values, handleChange, handleSubmit, errors, touched } = formik;
 
@@ -120,6 +148,9 @@ const PaymentForm = () => {
   const [checked, setChecked] = useState([]);
   const [showChecks, setShowChecks] = useState(false);
   const [showMemNum, setShowMemNum] = useState(false);
+
+  const [showCheque, setShowCheque] = useState(false);
+
   const handleCheckChange = (event) => {
     if (event.target.checked) {
       // add checkbox to checked array if user checks it
@@ -135,12 +166,71 @@ const PaymentForm = () => {
   const handleResetWorkshops = ()=>{
     setChecked([]);
   }
+  const handleCloseOfflinePaymentModal =()=>{
+    setOfflinePaymentModal(false);
+    showOfflinepaymentComplete("Thank you",`Dear ${gatewayRedirectData.name}, if you have successfully submitted your payment, we kindly request that you await confirmation from our administrator. Once the verification process is complete, they will be in touch with you promptly. Thank you for your patience and understanding`)
+    .then((result)=>{
+        if(result === "ok"){
+          window.location.href = "https://pcos-pay.vercel.app/"
+        }
+    })
+  }
 
-
- 
-
+  const handleShowAlert = () => {
+    setShowAlert(true);
+  };
+  const handleOfflinePaymentMethodChange = (e)=>{
+      setOfflinePaymentMethod(e.target.value)
+      if (e.target.value === "cheque") {
+        setShowCheque(true);
+      }
+      else {
+        setShowCheque(false);
+      }
+  }
+  
+  function showPaymentPrompt() {
+    return Swal({
+      title: 'Payment Options',
+      text: 'How would you like to pay?',
+      buttons: {
+              offline:{
+                text:"NTGS/NEFT/Cheque",
+                value:"offline"
+              },
+              online:{
+                text:"ONLINE",
+                value:"online"
+              }
+              
+      }
+      
+      
+    })
+    
+  }
+  function showOfflinepaymentComplete(title,text) {
+    return Swal({
+      title: title,
+      icon: "success",
+      text: text,
+      buttons: {
+              ok:{
+                text:"OK",
+                value:"ok"
+              },
+      }
+    })
+    
+  }
   return (
     <>
+    <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openOfflineBackdrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
         <Typography>Please determine your coverage</Typography>
           <form onSubmit={handleSubmit}>
             <FormControl
@@ -247,6 +337,7 @@ const PaymentForm = () => {
               error={touched.membership_number && Boolean(errors.membership_number)}
             
           >
+      <>
       <TextField
         value={values.membership_number}
         label="Membership Number"
@@ -260,6 +351,8 @@ const PaymentForm = () => {
           id: "membership_number",
         }}
       />
+      <Typography>Example : </Typography>
+      <Typography sx={{color:"rgb(239, 98, 35)"}}>THE PCOS SOCIETY : LM-1234</Typography></>
       {touched.membership_number && errors.membership_number && (
           <FormHelperText>{errors.membership_number}</FormHelperText>
         )}
@@ -407,6 +500,66 @@ const PaymentForm = () => {
         
         
       </Dialog>
+      
+      <Modal
+        open={showOfflinePaymentModal}
+        onClose={handleCloseOfflinePaymentModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={box_style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color:"#ac2642"}}>
+            BANK TRANSFER
+          </Typography>
+          {/* <FormControl sx={{width:"20%",marginTop:"3%",marginBottom:"3%"}} >
+            <InputLabel>Payment Type</InputLabel>
+            <Select label="Payment Type" onChange={handleOfflinePaymentMethodChange} value={offlinePaymentMethod}>
+              <MenuItem value="neft">NEFT/RTGS</MenuItem>
+              <MenuItem value="cheque">Cheque/DD</MenuItem>
+            </Select>
+          </FormControl>
+
+          {
+            showCheque ? 
+              <>
+              <Typography><Typography sx={{color:"#ac2642"}} >DD/Cheque</Typography> in favour of "<b>THE PCOS SOCIETY </b>"</Typography>
+              <Typography sx={{color:"#ac2642"}} >Cheque to be mailed to</Typography> 
+              <Typography>xyz</Typography>
+              </>
+              :
+              <>
+              <Typography><Typography sx={{color:"#ac2642"}} >Account No</Typography> <b>1234567890 </b></Typography>
+              <Typography>xyz</Typography>
+              </>
+              
+
+
+          
+          } */}
+
+
+<Table sx={{marginTop:"2%"}}>
+      <TableHead sx={{backgroundColor:"#ac2642"}}>
+        <TableRow>
+          <TableCell sx={{ border: '1px solid black',color:"#fff",fontWeight:"bold" }}>NEFT/RTGS</TableCell>
+          <TableCell sx={{ border: '1px solid black',color:"#fff",fontWeight:"bold" }}>Cheque/DD Payment</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Account No : 123456789101211</TableCell>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>DD/cheque in favor of "THE PCOS SOCIETY"</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Bank name and adress : Bank of India kdfjwefnjen </TableCell>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Cheque to be mailed To:ksdmfjnfjrfhbghbhgbhdfgghebrghbreh</TableCell>
+        </TableRow>
+        </TableBody>
+    </Table>
+          <Typography sx={{marginTop:"2%"}}>Note: Scanned copy of Bank Transfer should be sent to <Typography sx={{color:"blue"}}>pcosart2023@gmail.com</Typography> </Typography>
+          <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleCloseOfflinePaymentModal} variant="contained">OK</Button>
+        </Box>
+      </Modal>
     </>
   );
 };
