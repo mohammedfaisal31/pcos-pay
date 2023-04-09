@@ -207,7 +207,7 @@ useEffect(() => {
     <TableContainer component={Paper} sx={{padding:"2%"}}>
       <Typography sx={{textAlign:"center",color:"#fff",backgroundColor:"#03a36e",marginBottom:"2%",height:"7vh",fontSize:35}}>Admin Panel</Typography>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-      <Toolbar sx={{marginRight:"9%"}}>
+      <Toolbar sx={{marginRight:"8%"}}>
         <FilterList />
         <Grid container spacing={2}>
          <Grid item>
