@@ -226,7 +226,7 @@ useEffect(() => {
         </Grid>
         <Grid item>
         <select value={packageTypeFilter} onChange={handlePackageTypeFilterChange}>
-          <option value="all">All Accomodation Types</option>
+          <option value="all">All Package Types</option>
           <option value="residential">Residential package</option>
           <option value="non_residential">Non residential package</option>
         </select>
