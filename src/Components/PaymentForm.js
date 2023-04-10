@@ -2,7 +2,7 @@ import React,{useState,useContext,useEffect} from "react";
 import { Field, useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
-import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress } from '@mui/material';
+import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress, TableContainer } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import Swal from 'sweetalert';
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@mui/material';
@@ -501,16 +501,19 @@ const PaymentForm = () => {
         
       </Dialog>
       
-      <Modal
+      <Dialog
         open={showOfflinePaymentModal}
         onClose={handleCloseOfflinePaymentModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={box_style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color:"#ac2642"}}>
+        <DialogTitle>
+           <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color:"#ac2642"}}>
             BANK TRANSFER
           </Typography>
+        </DialogTitle>
+       <DialogContent>
+         
           {/* <FormControl sx={{width:"20%",marginTop:"3%",marginBottom:"3%"}} >
             <InputLabel>Payment Type</InputLabel>
             <Select label="Payment Type" onChange={handleOfflinePaymentMethodChange} value={offlinePaymentMethod}>
@@ -537,7 +540,7 @@ const PaymentForm = () => {
           
           } */}
 
-
+<TableContainer >
 <Table sx={{marginTop:"2%"}}>
       <TableHead sx={{backgroundColor:"#ac2642"}}>
         <TableRow>
@@ -556,10 +559,11 @@ const PaymentForm = () => {
         </TableRow>
         </TableBody>
     </Table>
+    </TableContainer>
           <Typography sx={{marginTop:"2%"}}>Note: Scanned copy of Bank Transfer should be sent to <Typography sx={{color:"blue"}}>pcosart2023@gmail.com</Typography> </Typography>
           <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleCloseOfflinePaymentModal} variant="contained">OK</Button>
-        </Box>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
