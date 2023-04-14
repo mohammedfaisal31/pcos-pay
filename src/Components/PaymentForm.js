@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
   member_type: Yup.string().required("Required"),
   membership_number: Yup.string().when("member_type", {
     is: "member"  ,
-    then: ()=>  Yup.string().matches(/^(PM|pm|LM|lm|AM|am)-\d{4}$/i,"Please enter a valid membership number").required("Membership number is required") ,
+    then: ()=>  Yup.string().matches(/^(PM|pm|LM|lm|AM|am)-\d{4}$|^\d{4}$|^\d{6}$/i,"Please enter a valid membership number").required("Membership number is required") ,
     otherwise: ()=> Yup.string().notRequired(),
   }),
     
@@ -351,8 +351,12 @@ const PaymentForm = () => {
           id: "membership_number",
         }}
       />
+      
       <Typography>Example : </Typography>
-      <Typography sx={{color:"rgb(239, 98, 35)"}}>THE PCOS SOCIETY : LM-1234</Typography></>
+      <Typography sx={{color:"rgb(239, 98, 35)"}}>THE PCOS SOCIETY : LM-1234</Typography>
+      <Typography sx={{color:"rgb(239, 98, 35)"}}>ASPIRE : 0001</Typography>
+      <Typography sx={{color:"rgb(239, 98, 35)"}}>ISAR : 000001</Typography></>
+      
       {touched.membership_number && errors.membership_number && (
           <FormHelperText>{errors.membership_number}</FormHelperText>
         )}
