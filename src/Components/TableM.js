@@ -11,6 +11,9 @@ import PendingIcon from '@mui/icons-material/Pending';
 import { FilterList } from '@mui/icons-material';
 import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
 import * as XLSX from 'xlsx';
+import AddIcon from '@mui/icons-material/Add';
+import AddEntryModal from './AddEntryModal';
+
 
 const styles = `
   .MuiTableCell-root {
@@ -60,6 +63,7 @@ const TableM = () => {
   
   
     const [openDetailsModal, setOpenDetailsModal] = useState(false);
+    const [openAddEntryModal, setOpenAddEntryModal] = useState(false);
     const handleFullDetailsClick = (rowData)=>{
           setSelectedRowData(rowData);
           setOpenDetailsModal(true);
@@ -69,7 +73,12 @@ const TableM = () => {
       setSelectedRowData(null);
       setOpenDetailsModal(false)
     }
-
+    const handleCloseAddEntryModal = ()=>{
+      setOpenAddEntryModal(false)
+    }
+    const handleOpenAddEntryModal = ()=>{
+      setOpenAddEntryModal(true)
+    }
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchBy, setSearchBy] = useState("user_name");
@@ -206,6 +215,20 @@ useEffect(() => {
     
     <TableContainer component={Paper} sx={{padding:"2%"}}>
       <Typography sx={{textAlign:"center",color:"#fff",backgroundColor:"#03a36e",marginBottom:"2%",height:"7vh",fontSize:35}}>Admin Panel</Typography>
+      <IconButton
+      size="large"
+      sx={{
+        '& .MuiSvgIcon-root': {
+          fontSize: '3rem',
+          border:" 2px #03a36e solid",
+          marginRight:"1%"
+        },
+      }}
+      onClick={handleOpenAddEntryModal}
+    >
+      <AddIcon />
+      <Typography> Add an Entry</Typography>
+    </IconButton>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
       <Toolbar sx={{marginRight:"8%"}}>
         <FilterList />
@@ -337,6 +360,8 @@ useEffect(() => {
           </IconButton>
         </TableCell>
         <UserDetailsModal openModal={openDetailsModal} closeModal={handleCloseDetailsModal} data={selectedRowData} />
+        <AddEntryModal openModal={openAddEntryModal} closeModal={handleCloseAddEntryModal} />
+        
         
         <TableCell>
           {
