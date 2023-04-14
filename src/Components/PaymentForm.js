@@ -550,12 +550,12 @@ const PaymentForm = () => {
       </TableHead>
       <TableBody>
         <TableRow>
-          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Account No : 123456789101211</TableCell>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Account No : 840510210000006</TableCell>
           <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>DD/cheque in favor of "THE PCOS SOCIETY"</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Bank name and adress : Bank of India kdfjwefnjen </TableCell>
-          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Cheque to be mailed To:ksdmfjnfjrfhbghbhgbhdfgghebrghbreh</TableCell>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Bank name and adress : Bank of India , 623 10TH A MAIN NE, MAIN BUS STOP 4TH B, BANGALORE, KARNATAKA , 560011 <br/> RTGS/IFSC code: BKID0008405 </TableCell>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Cheque to be mailed To: </TableCell>
         </TableRow>
         </TableBody>
     </Table>
