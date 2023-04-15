@@ -559,7 +559,7 @@ const PaymentForm = () => {
         </TableRow>
         <TableRow>
           <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Bank name and adress : Bank of India , 623 10TH A MAIN NE, MAIN BUS STOP 4TH B, BANGALORE, KARNATAKA , 560011 <br/> RTGS/IFSC code: BKID0008405 </TableCell>
-          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Cheque to be mailed To: </TableCell>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}><Typography sx={{color:"red"}}>Cheque to be mailed To:</Typography> Dr.Patil's Fertility and Endoscopy,No 1 Uma Admirality,First floor, Above HDFC Bank,Near Jal Bhavan,Bannerghatta Road,Bengaluru 560029</TableCell>
         </TableRow>
         </TableBody>
     </Table>

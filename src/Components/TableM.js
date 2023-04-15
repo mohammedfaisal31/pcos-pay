@@ -60,7 +60,9 @@ const TableM = () => {
     
   }, [])
   
-  
+  function zeroPad(num, length) {
+    return num.toString().padStart(length, '0');
+  }
   
     const [openDetailsModal, setOpenDetailsModal] = useState(false);
     const [openAddEntryModal, setOpenAddEntryModal] = useState(false);
@@ -289,6 +291,7 @@ useEffect(() => {
         <MenuItem value="user_phone">Phone</MenuItem>
         <MenuItem value="user_email">Email</MenuItem>
         <MenuItem value="transaction_id">Transaction ID</MenuItem>
+        <MenuItem value="unique_id">Registration Number</MenuItem>
       </Select>
       </FormControl>
       <Stack sx={{marginLeft:"5%",textAlign:"center"}}>
@@ -301,6 +304,7 @@ useEffect(() => {
   <Table>
             <TableHead sx={{backgroundColor:"#03a36e",}}>
               <TableRow >
+                <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Registration Number</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Transaction Id</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Name</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Email</TableCell>
@@ -317,6 +321,7 @@ useEffect(() => {
     {filterData(filteredData,searchTerm,searchBy).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
       <>
       <TableRow key={row.transaction_id}>
+      <TableCell>{row.unique_id = zeroPad(row.unique_id,4) }</TableCell>
         <TableCell>{row.transaction_id}</TableCell>
         <TableCell>{row.user_name}</TableCell>
         <TableCell>{row.user_email}</TableCell>
