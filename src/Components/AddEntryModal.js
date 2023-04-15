@@ -21,7 +21,7 @@ const clickhereButton = {
     member_type: Yup.string().required("Required"),
     membership_number: Yup.string().when("member_type", {
       is: "member"  ,
-      then: ()=>  Yup.string().matches(/^(PM|pm|LM|lm|AM|am)-\d{4}$|^\d{4}$|^\d{6}$/i,"Please enter a valid membership number").required("Membership number is required") ,
+      then: ()=>  Yup.string().matches(/^(LM|PM|AM|ASPIRE|ISAR)-(\d{1,4}|\d{6})$/i,"Please enter a valid membership number").required("Membership number is required") ,
       otherwise: ()=> Yup.string().notRequired(),
     }),
     user_email: Yup.string().email("Enter a valid email").required("Required"),
@@ -273,9 +273,10 @@ export default function AddEntryModal(props) {
         }}
       />
        <Typography>Example : </Typography>
-      <Typography sx={{color:"rgb(239, 98, 35)"}}>THE PCOS SOCIETY : LM-1234</Typography>
-      <Typography sx={{color:"rgb(239, 98, 35)"}}>ASPIRE : 0001</Typography>
-      <Typography sx={{color:"rgb(239, 98, 35)"}}>ISAR : 000001</Typography></>
+       <Typography><i>for</i> <span style={{fontWeight:"bold"}}>PCOS SOCIETY</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>LM-1234</span></Typography>
+      <Typography><i>for</i> <span style={{fontWeight:"bold"}}>ASPIRE</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>ASPIRE-0001</span></Typography>
+      <Typography><i>for</i> <span style={{fontWeight:"bold"}}>ISAR</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>ISAR-000001</span></Typography>
+      </>
       {touched.membership_number && errors.membership_number && (
           <FormHelperText>{errors.membership_number}</FormHelperText>
         )}
@@ -405,7 +406,7 @@ export default function AddEntryModal(props) {
           <Field name="user_email" as={TextField} label="Email"  error={touched.user_email && Boolean(errors.user_email)} helperText={touched.user_email && errors.user_email}/>
           <Field name="user_salutation" as={TextField} label="Salutation"   error={touched.user_salutation && Boolean(errors.user_salutation)} helperText={touched.user_salutation && errors.user_email}/>
           <Field name="user_name" as={TextField} label="Name"   error={touched.user_name && Boolean(errors.user_name)} helperText={touched.user_name && errors.user_name}/>
-          <Field name="amount" as={TextField} label="Amount paid"  error={touched.amount && Boolean(errors.amount)} helperText={touched.amount && errors.amount}/>
+          <Field name="amount" as={TextField} label="Amount paid(includng GST)"  error={touched.amount && Boolean(errors.amount)} helperText={touched.amount && errors.amount}/>
           <Field name="paymentID" as={TextField} label="Payment ID"  error={touched.paymentID && Boolean(errors.paymentID)} helperText={touched.paymentID && errors.paymentID}/>
           <Field name="payment_purpose" as={TextField} label="Payment Purpose"  error={touched.payment_purpose && Boolean(errors.payment_purpose)} helperText={touched.payment_purpose && errors.payment_purpose}/>
           <Field name="user_age" as={TextField} label="Age" error={touched.user_age && Boolean(errors.user_age)} helperText={touched.user_age && errors.user_age} />

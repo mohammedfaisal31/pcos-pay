@@ -290,7 +290,6 @@ useEffect(() => {
         <MenuItem value="user_name">Name</MenuItem>
         <MenuItem value="user_phone">Phone</MenuItem>
         <MenuItem value="user_email">Email</MenuItem>
-        <MenuItem value="transaction_id">Transaction ID</MenuItem>
         <MenuItem value="unique_id">Registration Number</MenuItem>
       </Select>
       </FormControl>
@@ -305,7 +304,6 @@ useEffect(() => {
             <TableHead sx={{backgroundColor:"#03a36e",}}>
               <TableRow >
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Registration Number</TableCell>
-                <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Transaction Id</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Name</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Email</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Phone</TableCell>
@@ -322,7 +320,6 @@ useEffect(() => {
       <>
       <TableRow key={row.transaction_id}>
       <TableCell>{row.unique_id = zeroPad(row.unique_id,4) }</TableCell>
-        <TableCell>{row.transaction_id}</TableCell>
         <TableCell>{row.user_name}</TableCell>
         <TableCell>{row.user_email}</TableCell>
         <TableCell>{row.user_phone}</TableCell>
