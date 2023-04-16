@@ -24,8 +24,10 @@ export default function AgreementPhone() {
         <Paper sx={{padding:"5%"}} elevation={2}>
             <Typography variant="h5">Welcome, please go through all the packages below</Typography>
             <ul>
-                <li>Click proceed at the bottom of the page(if you agree to the terms) </li>
-                <li>Select your package in the next step</li>
+                <li style={{marginTop:"1%"}}>Click proceed at the bottom of the page(if you agree to the terms) </li>
+                <li style={{marginTop:"1%"}}>Select your package in the next step</li>
+                <li style={{marginTop:"1%"}}>Please note that all of the prices mentioned are including GST(both in USD and INR)</li>
+                
                 
             </ul>
             </Paper>

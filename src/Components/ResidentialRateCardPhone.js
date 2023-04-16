@@ -12,6 +12,14 @@ import {
   import EachRowRateCard from "./EachRowRateCard";
   
   
+  function addGSTFormatRupee(num) {
+    return (num*0.18+num).toLocaleString('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+  }
   const ResidentialRateCardPhone = () => {
   
     return (
@@ -57,8 +65,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#ef6223",type:"Non Member",c1:"39500+ 18% GST",c2:"30500 + 18% GST",c3:"40500 + 18% GST",c4:"31500 + 18% GST",accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
-                      <EachRowRateCard options={{theme:"#ef6223",type:"PCOS/ISAR/ASPIRE member",c1:"38500+ 18% GST",c2:"29500+ 18% GST",c3:"39500+ 18% GST",c4:"30500+ 18% GST",accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
+                      <EachRowRateCard  options={{theme:"#ef6223",type:"Non Member",c1:addGSTFormatRupee(39500),c2:addGSTFormatRupee(30500),c3:addGSTFormatRupee(40500),c4:addGSTFormatRupee(31500),accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
+                      <EachRowRateCard options={{theme:"#ef6223",type:"PCOS/ISAR/ASPIRE member",c1:addGSTFormatRupee(38500),c2:addGSTFormatRupee(29500),c3:addGSTFormatRupee(39500),c4:addGSTFormatRupee(30500),accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
                       </Stack>
                       </AccordionDetails>
                     </Accordion >
@@ -68,8 +76,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#ef6223",type:"Non Member",c1:"39500+ 18% GST",c2:"30500+ 18% GST",c3:"35500+ 18% GST",c4:"26500+ 18% GST",accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
-                      <EachRowRateCard options={{theme:"#ef6223",type:"PCOS/ISAR/ASPIRE member",c1:"33500+ 18% GST",c2:"24500+ 18% GST",c3:"34500+ 18% GST",c4:"25500+ 18% GST",accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
+                      <EachRowRateCard  options={{theme:"#ef6223",type:"Non Member",c1:addGSTFormatRupee(39500),c2:addGSTFormatRupee(30500),c3:addGSTFormatRupee(35500),c4:addGSTFormatRupee(26500),accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
+                      <EachRowRateCard options={{theme:"#ef6223",type:"PCOS/ISAR/ASPIRE member",c1:addGSTFormatRupee(33500),c2:addGSTFormatRupee(24500),c3:addGSTFormatRupee(34500),c4:addGSTFormatRupee(25500),accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
                       </Stack>
                       </AccordionDetails>
                     </Accordion>
@@ -79,8 +87,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#ef6223",type:"Non Member",c1:"22000 + 18% GST",c2:"17500 + 18% GST",c3:"23000 + 18% GST",c4:"18500 + 18% GST",accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person",}}/>
-                      <EachRowRateCard options={{theme:"#ef6223",type:"PCOS/ISAR/ASPIRE member",c1:"21000 + 18% GST",c2:"16500 + 18% GST",c3:"22000 + 18% GST",c4:"17500 + 18% GST",accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
+                      <EachRowRateCard  options={{theme:"#ef6223",type:"Non Member",c1:addGSTFormatRupee(22000),c2:addGSTFormatRupee(17500),c3:addGSTFormatRupee(39500),c4:addGSTFormatRupee(18500),accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person",}}/>
+                      <EachRowRateCard options={{theme:"#ef6223",type:"PCOS/ISAR/ASPIRE member",c1:addGSTFormatRupee(21000),c2:addGSTFormatRupee(16500),c3:addGSTFormatRupee(22000),c4:addGSTFormatRupee(17500),accomodation1:" Till April 15th - Single room",accomodation2:"Till April 15th - Twin sharing per person",accomodation3:"16th April to 15th May - Single room",accomodation4:"16th April to 15th May - Twin sharing per person"}}/>
                       </Stack>
           </AccordionDetails>
       </Accordion>

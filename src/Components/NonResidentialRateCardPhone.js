@@ -11,6 +11,14 @@ import {
   import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
   import EachRowRateCard from "./EachRowRateCard";
   
+  function addGSTFormatRupee(num) {
+    return (num*0.18+num).toLocaleString('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+  }
   
   const NonResidentialRateCardPhone = () => {
   
@@ -57,8 +65,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"14500 + 18% GST",c2:"15500 + 18% GST",c3:"16500 + 18% GST",c4:"18000 + 18% GST",accomodation1:" Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
-                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"13500 + 18% GST",c2:"14500 + 18% GST",c3:"15500 + 18% GST",c4:"17000 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:addGSTFormatRupee(14500),c2:addGSTFormatRupee(15500),c3:addGSTFormatRupee(16500),c4:addGSTFormatRupee(18000),accomodation1:" Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:addGSTFormatRupee(13500),c2:addGSTFormatRupee(14500),c3:addGSTFormatRupee(15500),c4:addGSTFormatRupee(17000),accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
                       </Stack>
                       </AccordionDetails>
                     </Accordion >
@@ -68,8 +76,8 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"9500 + 18% GST",c2:"10500 + 18% GST",c3:"11500 + 18% GST",c4:"13000 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
-                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"8500 + 18% GST",c2:"9500 + 18% GST",c3:"10500 + 18% GST",c4:"12000 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:addGSTFormatRupee(9500),c2:addGSTFormatRupee(10500),c3:addGSTFormatRupee(11500),c4:addGSTFormatRupee(13000),accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:addGSTFormatRupee(8500),c2:addGSTFormatRupee(9500),c3:addGSTFormatRupee(10500),c4:addGSTFormatRupee(12000),accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
                       </Stack>
                       </AccordionDetails>
                     </Accordion>
@@ -79,8 +87,19 @@ import {
                       </AccordionSummary>
                       <AccordionDetails>
                       <Stack spacing={2}>
-                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:"9000 + 18% GST",c2:"10000 + 18% GST",c3:"11000 + 18% GST",c4:"12500 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
-                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:"8000 + 18% GST",c2:"9000 + 18% GST",c3:"10000 + 18% GST",c4:"11500 + 18% GST",accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:addGSTFormatRupee(9000),c2:addGSTFormatRupee(10000),c3:addGSTFormatRupee(11000),c4:addGSTFormatRupee(12500),accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:addGSTFormatRupee(8000),c2:addGSTFormatRupee(9000),c3:addGSTFormatRupee(10000),c4:addGSTFormatRupee(11500),accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      </Stack>
+          </AccordionDetails>
+      </Accordion>
+      <Accordion defaultExpanded sx={{backgroundColor:"#d6b2b4"}}>
+                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                     Accompanying person
+                      </AccordionSummary>
+                      <AccordionDetails>
+                      <Stack spacing={2}>
+                      <EachRowRateCard  options={{theme:"#d84a5e",type:"Non Member",c1:addGSTFormatRupee(8000),c2:addGSTFormatRupee(8000),c3:addGSTFormatRupee(9000),c4:addGSTFormatRupee(10000),accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
+                      <EachRowRateCard options={{theme:"#d84a5e",type:"PCOS/ISAR/ASPIRE member",c1:addGSTFormatRupee(8000),c2:addGSTFormatRupee(8000),c3:addGSTFormatRupee(9000),c4:addGSTFormatRupee(10000),accomodation1:"Till April 15th",accomodation2:"16th April to 15th May",accomodation3:"After 15th May",accomodation4:"After 7th June and Spot"}}/>
                       </Stack>
           </AccordionDetails>
       </Accordion>

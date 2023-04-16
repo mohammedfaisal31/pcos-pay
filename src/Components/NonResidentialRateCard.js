@@ -8,6 +8,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
 
+function formatRupee(num) {
+  return num.toLocaleString('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  });
+}
 export default function RateCard() {
   return (
     <div style={{padding:"1%"}}>
@@ -66,29 +74,29 @@ export default function RateCard() {
           <TableRow sx={{backgroundColor:"#DAC4BF"}}>
           <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>*Conference + 2 Workshops</TableCell>
               <TableCell sx={{ border: '1px solid black'  ,borderLeft:"3px solid #9d3d44"  }}>
-              13500 + 18% GST  
+              {formatRupee(15930)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              14500 + 18% GST  
+               {formatRupee(17110)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black' }}>
-              15500 + 18% GST 
+                {formatRupee(18290)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              17000 + 18% GST
+               {formatRupee(20060)} 
               </TableCell>  
               
               <TableCell sx={{ border: '1px solid black',borderLeft:"3px solid #9d3d44"  }}>
-              14500 + 18% GST  
+               {formatRupee(17110)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              15500 + 18% GST 
+               {formatRupee(18290)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              16500 + 18% GST  
+               {formatRupee(19470)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              18000 + 18% GST
+               {formatRupee(21240)} 
               </TableCell>  
               
           </TableRow>
@@ -96,63 +104,93 @@ export default function RateCard() {
           <TableRow sx={{backgroundColor:"#E9DDDA"}}>
           <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>**Conference only</TableCell>
               <TableCell sx={{ border: '1px solid black',borderLeft:"3px solid #9d3d44"  }}>
-              8500 + 18% GST  
+               {formatRupee(10030)} 
               </TableCell >  
               <TableCell sx={{ border: '1px solid black', }}>
-              9500 + 18% GST  
+               {formatRupee(11210)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              10500 + 18% GST 
+              {formatRupee(12390)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              12000 + 18% GST
+              {formatRupee(14160)} 
               </TableCell>  
               
               <TableCell sx={{ border: '1px solid black',borderLeft:"3px solid #9d3d44" }}>
-              9500 + 18% GST  
+               {formatRupee(11210)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              10500 + 18% GST 
+               {formatRupee(12390)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              11500 + 18% GST  
+               {formatRupee(13570)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              13000 + 18% GST
+               {formatRupee(15340)} 
               </TableCell>  
               
           </TableRow>
           <TableRow sx={{backgroundColor:"#DAC4BF"}}>
           <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>***Post Graduate Students Conference + 2 Workshops</TableCell>
               <TableCell sx={{ border: '1px solid black',borderLeft:"3px solid #9d3d44"  }}>
-              8000 + 18% GST  
+                 {formatRupee(9440)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              9000 + 18% GST  
+                 {formatRupee(10620)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              10000 + 18% GST 
+                {formatRupee(11800)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              11500 + 18% GST
+               {formatRupee(13570)} 
               </TableCell >  
               
               <TableCell sx={{ border: '1px solid black' ,borderLeft:"3px solid #9d3d44"}}>
-              9000 + 18% GST  
+                 {formatRupee(10620)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              10000 + 18% GST 
+                {formatRupee(11800)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              11000 + 18% GST  
+                 {formatRupee(12980)} 
               </TableCell>  
               <TableCell sx={{ border: '1px solid black', }}>
-              12500 + 18% GST
+               {formatRupee(14750)} 
               </TableCell>  
               
           </TableRow>
+          <TableRow sx={{backgroundColor:"#DAC4BF"}}>
+          <TableCell sx={{fontWeight:"bold", border: '1px solid black'}}>****Accompanying person </TableCell>
+              <TableCell sx={{ border: '1px solid black',borderLeft:"3px solid #9d3d44"  }}>
+                 {formatRupee(9440)} 
+              </TableCell>  
+              <TableCell sx={{ border: '1px solid black', }}>
+                 {formatRupee(9440)} 
+              </TableCell>  
+              <TableCell sx={{ border: '1px solid black', }}>
+                {formatRupee(10620)} 
+              </TableCell>  
+              <TableCell sx={{ border: '1px solid black', }}>
+               {formatRupee(11800)} 
+              </TableCell >  
+              
+              <TableCell sx={{ border: '1px solid black' ,borderLeft:"3px solid #9d3d44"}}>
+                 {formatRupee(9440)} 
+              </TableCell>  
+              <TableCell sx={{ border: '1px solid black', }}>
+                {formatRupee(9440)} 
+              </TableCell>  
+              <TableCell sx={{ border: '1px solid black', }}>
+                 {formatRupee(10620)} 
+              </TableCell>  
+              <TableCell sx={{ border: '1px solid black', }}>
+               {formatRupee(11800)} 
+              </TableCell>  
+              
+          </TableRow>
+          
           <TableRow>
-            <TableCell colspan={9} sx={{backgroundColor:"#ac2642",textAlign:"center",color:"#fff",fontWeight:"bold"}}>Inclusive of GST for International Delegates in USD</TableCell>
+            <TableCell colspan={9} sx={{backgroundColor:"#ac2642",textAlign:"center",color:"#fff",fontWeight:"bold"}}>All prices are inclusive of GST in USD and INR</TableCell>
          </TableRow>
         <TableRow sx={{backgroundColor:"#E9DDDA"}}>
           <TableCell sx={{fontWeight:"bold",border: '1px solid black' }}>*International Delegates Conference + 2 Workshops</TableCell>
