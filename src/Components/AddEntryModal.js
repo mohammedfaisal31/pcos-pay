@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import CancelIcon from '@mui/icons-material/Cancel';
 import axios from 'axios';
 import SuccessSnackBar from './SuccessSnackBar';
+import dayjs from "dayjs";
 
   
 const clickhereButton = {
@@ -93,7 +94,12 @@ export default function AddEntryModal(props) {
       const [showMemNum, setShowMemNum] = useState(false);
       const [checked, setChecked] = useState([]);
       const [showChecks, setShowChecks] = useState(false);
-    
+      const [checkInDate, setCheckInDate] = useState(null);
+      const [checkOutDate, setCheckOutDate] = useState(null);
+      
+      const [showDatePickers, setShowDatePickers] = useState(false);
+      const [daysToAddtoMax,setDaysToAddtoMax] = useState(0);
+      
       const canCheckMore = checked.length < 2;
       const handleCheckChange = (event) => {
         if (event.target.checked) {
@@ -114,6 +120,8 @@ export default function AddEntryModal(props) {
       }
       const handleSubmit = (values) => {
           values.workshop_titles = checked;
+          values.check_in_date = checkInDate;
+          values.check_out_date = checkOutDate;
           console.log(values);
           setShowEditBackdrop(true);
           axios.post("https://kisargo.ml/api/entry",values)
@@ -126,6 +134,11 @@ export default function AddEntryModal(props) {
           
       };
 
+      const handleCheckInDateChange = (e) => {
+        setCheckInDate(e.target.value);
+        const minCheckOutDate = dayjs(e.target.value).add(daysToAddtoMax, "day").format("YYYY-MM-DD");
+        setCheckOutDate(minCheckOutDate);
+      };
 
     return (
     <Dialog
@@ -295,6 +308,10 @@ export default function AddEntryModal(props) {
           onChange={(e)=>{
             if(e.target.value === "conference_type_1") setShowChecks(true)
             else setShowChecks(false);
+            setShowDatePickers(true);
+            if(e.target.value === "conference_type_1" || e.target.value === "conference_type_2") setDaysToAddtoMax(2)
+            else setDaysToAddtoMax(1);
+            
             setFieldValue("conference_type", e.target.value);
           }}
           inputProps={{
@@ -349,7 +366,48 @@ export default function AddEntryModal(props) {
           {/* <Field name="member_type" as={TextField} label="Membership type"  />
           <Field name="accomodation_type" as={TextField} label="Accomodation Type"  />
           <Field name="conference_type" as={TextField} label="Type of conference"  />  */}
-           
+           {showDatePickers && 
+      <>
+      <FormControl fullWidth margin="normal">
+            <TextField
+              id="checkin_date"
+              name="checkin_date"
+              label="Check-in Date"
+              type="date"
+              value={checkInDate}
+              InputLabelProps={{
+                shrink: true,
+              }} 
+              inputProps={{
+                min: "2023-06-09",
+                max: "2023-06-11",
+              }}
+              onChange={handleCheckInDateChange}
+            />
+          </FormControl>
+        
+          {checkInDate && (
+            <FormControl fullWidth margin="normal">
+              <TextField
+                id="checkout_date"
+                name="checkout_date"
+                label="Check-out Date"
+                type="date"
+                value={checkOutDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  min: dayjs(checkInDate).add(daysToAddtoMax, "day").format("YYYY-MM-DD"),
+                  max: dayjs(checkInDate).add(daysToAddtoMax, "day").format("YYYY-MM-DD"),
+                }}
+                onChange={(e) => setCheckOutDate(e.target.value)}
+              />
+            </FormControl>
+          )}
+          <Typography>Date Format: MM/DD/YYYY</Typography>
+          </>
+        }
          {showChecks && 
       <>
       <Typography sx={{marginTop:"5%",color:"#ef6223",fontWeight:"bold"}}>Workshp Titles(Attend any 2)</Typography>

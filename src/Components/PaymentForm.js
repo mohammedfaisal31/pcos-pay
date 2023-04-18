@@ -1,12 +1,15 @@
 import React,{useState,useContext,useEffect} from "react";
-import { Field, useFormik } from "formik";
+import { Field, Form, useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
 import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress, TableContainer } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import Swal from 'sweetalert';
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@mui/material';
-
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from "dayjs";
 
 import {
   InputLabel,
@@ -39,7 +42,9 @@ const initialValues = {
   conference_type:"",
   accomodation_type:"single_room",
   workshop_titles : [],
-  membership_number:""
+  membership_number:"",
+  check_in_date:"",
+  check_out_date:""
 
 };
 
@@ -89,24 +94,31 @@ const PaymentForm = () => {
   const [showOfflinePaymentModal, setOfflinePaymentModal] = useState(false);
   const [offlinePaymentMethod, setOfflinePaymentMethod] = useState("");
   const [openOfflineBackdrop, setOpenOfflineBackdrop] = useState(false);
-  
 
+
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
+  
+  const [showDatePickers, setShowDatePickers] = useState(false);
+  const [daysToAddtoMax,setDaysToAddtoMax] = useState(0);
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit:  (values) => {
+      console.log(values);
       axios.post('https://kisargo.ml/api/fetch-price', values)
       .then((result)=>{
         setaAmountTitle(result.data.title);
         setTotalAmount(result.data.total_amount);
         setPaymentPurpose(result.data.purpose)
-        setGatewayRedirectData({...gatewayData,title:result.data.title,amount:result.data.total_amount,purpose:result.data.purpose,values,workshop_titles:checked})
+        setGatewayRedirectData({...gatewayData,title:result.data.title,amount:result.data.total_amount,purpose:result.data.purpose,values,workshop_titles:checked,check_in_date:checkInDate,check_out_date:checkOutDate})
         setPayNow(true);
       })
       .catch((err)=>console.log(err))
     },
   });
   const createPaymentRequest = ()=>{
+    console.log(gatewayRedirectData)
     showPaymentPrompt()
     .then((result)=>{
         if(result === "online"){
@@ -223,6 +235,30 @@ const PaymentForm = () => {
     })
     
   }
+
+  const handleConferenceSelection = (e) => {
+    if (e.target.value === "conference_type_1") {
+      setShowChecks(true);
+    } else {
+      setShowChecks(false);
+    }
+  };
+
+  const handleCheckInChange = (date) => {
+    setCheckInDate(date);
+    setCheckOutDate(date ? new Date(date.setDate(date.getDate() + 3)) : null);
+  };
+
+  const handleCheckOutChange = (date) => {
+    setCheckOutDate(date);
+  };
+
+  const handleCheckInDateChange = (e) => {
+    setCheckInDate(e.target.value);
+    const minCheckOutDate = dayjs(e.target.value).add(daysToAddtoMax, "day").format("YYYY-MM-DD");
+    setCheckOutDate(minCheckOutDate);
+  };
+
   return (
     <>
     <Backdrop
@@ -363,7 +399,8 @@ const PaymentForm = () => {
         )}
     </FormControl>
   }
-      {accomodationEnabled? <FormControl
+      {accomodationEnabled? 
+      <FormControl
         fullWidth
         margin="normal"
         error={touched.member_type && Boolean(errors.member_type)}
@@ -377,7 +414,11 @@ const PaymentForm = () => {
             if(e.target.value === "conference_type_1") setShowChecks(true)
             else setShowChecks(false);
             setPayNow(false);
+            setShowDatePickers(true);
+            if(e.target.value === "conference_type_1" || e.target.value === "conference_type_2") setDaysToAddtoMax(2)
+            else setDaysToAddtoMax(1);
             formik.setFieldValue("conference_type", e.target.value);
+            
           }}
           inputProps={{
             name: "conference_type",
@@ -427,7 +468,48 @@ const PaymentForm = () => {
         )}
       </FormControl>
       }
-      
+      {showDatePickers && 
+      <>
+      <FormControl fullWidth margin="normal">
+            <TextField
+              id="checkin_date"
+              name="checkin_date"
+              label="Check-in Date"
+              type="date"
+              value={checkInDate}
+              InputLabelProps={{
+                shrink: true,
+              }} 
+              inputProps={{
+                min: "2023-06-09",
+                max: "2023-06-11",
+              }}
+              onChange={handleCheckInDateChange}
+            />
+          </FormControl>
+        
+          {checkInDate && (
+            <FormControl fullWidth margin="normal">
+              <TextField
+                id="checkout_date"
+                name="checkout_date"
+                label="Check-out Date"
+                type="date"
+                value={checkOutDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  min: dayjs(checkInDate).add(daysToAddtoMax, "day").format("YYYY-MM-DD"),
+                  max: dayjs(checkInDate).add(daysToAddtoMax, "day").format("YYYY-MM-DD"),
+                }}
+                onChange={(e) => setCheckOutDate(e.target.value)}
+              />
+            </FormControl>
+          )}
+          <Typography>Date Format: MM/DD/YYYY</Typography>
+          </>
+        }
       {showChecks && 
       <>
       <Typography sx={{marginTop:"5%",color:"#ef6223",fontWeight:"bold"}}>Workshp Titles(Attend any 2)</Typography>
