@@ -303,6 +303,7 @@ useEffect(() => {
   <Table>
             <TableHead sx={{backgroundColor:"#03a36e",}}>
               <TableRow >
+      
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Registration Number</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Name</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Email</TableCell>
@@ -313,13 +314,15 @@ useEffect(() => {
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Payment Method</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Edit Full Details</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Send Email Receipt</TableCell>
+
               </TableRow>
             </TableHead>
    <TableBody>
     {filterData(filteredData,searchTerm,searchBy).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
       <>
       <TableRow key={row.transaction_id}>
-      <TableCell>{row.unique_id = zeroPad(row.unique_id,4) }</TableCell>
+        
+        <TableCell>{row.unique_id = zeroPad(row.unique_id,4) }</TableCell>
         <TableCell>{row.user_name}</TableCell>
         <TableCell>{row.user_email}</TableCell>
         <TableCell>{row.user_phone}</TableCell>

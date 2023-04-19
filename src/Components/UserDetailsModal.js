@@ -196,7 +196,10 @@ export default function UserDetailsModal(props) {
           <Field name="user_membership_number" as={TextField} label="Membership Number"  />
           <Field name="user_sex" as={TextField} label="Sex"  />
           <Field name="workshop_titles" as={TextField} label="Workshop Titles"  />
+          <Field name="check_in_date" as={TextField} label="Check In date"  />
+          <Field name="check_out_date" as={TextField} label="Check out Date"  />
           <Field name="payment_method" as={TextField} label="Payment Method"  />
+          
           <Grid container>
             <Grid item xs={9}>
             <Button type="submit" variant="contained">save</Button>
