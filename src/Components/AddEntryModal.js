@@ -96,7 +96,7 @@ export default function AddEntryModal(props) {
       const [showChecks, setShowChecks] = useState(false);
       const [checkInDate, setCheckInDate] = useState(null);
       const [checkOutDate, setCheckOutDate] = useState(null);
-      
+      const [memNumValid, setMemNumValid] = useState(true);
       const [showDatePickers, setShowDatePickers] = useState(false);
       const [daysToAddtoMax,setDaysToAddtoMax] = useState(0);
       
@@ -170,8 +170,7 @@ export default function AddEntryModal(props) {
       <Form>
          <Stack spacing={2} sx={{marginTop:"5%"}}>
          
-          
-          <FormControl
+         <FormControl
               fullWidth
               margin="normal"
               error={touched.package_type && Boolean(errors.package_type)}
@@ -185,6 +184,11 @@ export default function AddEntryModal(props) {
           onChange={(e)=>{
             resetForm();
             setShowChecks(false);
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowMemNum(false);
             handleResetWorkshops();
             if(e.target.value === "residential") {
               setAccomodationEnabled(true);
@@ -192,7 +196,8 @@ export default function AddEntryModal(props) {
             else {
               setAccomodationEnabled(false);
             }
-            setFieldValue("package_type", e.target.value);
+            
+              setFieldValue("package_type", e.target.value);
           }}
           inputProps={{
             name: "package_type",
@@ -207,6 +212,7 @@ export default function AddEntryModal(props) {
           <FormHelperText>{errors.package_type}</FormHelperText>
         )}
       </FormControl>
+      
       {accomodationEnabled && 
       <FormControl
         fullWidth
@@ -221,16 +227,26 @@ export default function AddEntryModal(props) {
           onChange={(e)=>{
             setShowChecks(false);
             setFieldValue("accomodation_type", e.target.value);
+            setFieldValue("member_type", '');
+            setFieldValue("membership_number", '');
+            setFieldValue("conference_type", '');
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowMemNum(false);
+            
+            
           }}
           inputProps={{
             name: "accomodation_type",
             id: "accomodation_type",
           }}
         >
+          <option value=""></option>
           <option value="single_room">Single Room</option>
           <option value="twin_room">Twin Sharing per person</option>
         </Select>
-        
         {accomodationEnabled && touched.accomodation_type && errors.accomodation_type && (
           <FormHelperText>{errors.accomodation_type}</FormHelperText>
         )}
@@ -249,7 +265,14 @@ export default function AddEntryModal(props) {
           onChange={(e)=>{
             if(e.target.value === "member") setShowMemNum(true);
             else setShowMemNum(false);
-            setFieldValue("member_type", e.target.value);
+           setFieldValue("member_type", e.target.value);
+           setFieldValue("membership_number", '');
+           setFieldValue("conference_type", '');
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowChecks(false);
           }}
           inputProps={{
             name: "member_type",
@@ -278,6 +301,8 @@ export default function AddEntryModal(props) {
         label="Membership Number"
         onChange={(e)=>{
           setFieldValue("membership_number", e.target.value);
+          setMemNumValid(/^(LM|PM|AM|ASPIRE|ISAR|lm|pm|am|aspire|isar)-(\d{1,4}|\d{6})$/.test(e.target.value));
+          
         }}
         variant="outlined"
         inputProps={{
@@ -285,17 +310,20 @@ export default function AddEntryModal(props) {
           id: "membership_number",
         }}
       />
-       <Typography>Example : </Typography>
-       <Typography><i>for</i> <span style={{fontWeight:"bold"}}>PCOS SOCIETY</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>LM-1234</span></Typography>
+      
+      <Typography>Example : </Typography>
+      <Typography><i>for</i> <span style={{fontWeight:"bold"}}>PCOS SOCIETY</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>LM-1234</span></Typography>
       <Typography><i>for</i> <span style={{fontWeight:"bold"}}>ASPIRE</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>ASPIRE-0001</span></Typography>
       <Typography><i>for</i> <span style={{fontWeight:"bold"}}>ISAR</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>ISAR-000001</span></Typography>
       </>
+      
       {touched.membership_number && errors.membership_number && (
           <FormHelperText>{errors.membership_number}</FormHelperText>
         )}
     </FormControl>
   }
-      {accomodationEnabled? <FormControl
+      {accomodationEnabled? 
+      <FormControl
         fullWidth
         margin="normal"
         error={touched.member_type && Boolean(errors.member_type)}
@@ -308,11 +336,14 @@ export default function AddEntryModal(props) {
           onChange={(e)=>{
             if(e.target.value === "conference_type_1") setShowChecks(true)
             else setShowChecks(false);
-            setShowDatePickers(true);
             if(e.target.value === "conference_type_1" || e.target.value === "conference_type_2") setDaysToAddtoMax(2)
             else setDaysToAddtoMax(1);
-            
             setFieldValue("conference_type", e.target.value);
+            setShowDatePickers(true);
+            setCheckInDate("");
+            setCheckOutDate("");
+            setChecked([]);
+            
           }}
           inputProps={{
             name: "conference_type",
@@ -344,6 +375,9 @@ export default function AddEntryModal(props) {
             if(e.target.value === "conference_type_2" || e.target.value === "conference_type_3") setShowChecks(true)
             else setShowChecks(false);
             setFieldValue("conference_type", e.target.value);
+            setCheckInDate("");
+            setCheckOutDate("");
+            setChecked([]);
           }}
           inputProps={{
             name: "conference_type",
@@ -361,14 +395,9 @@ export default function AddEntryModal(props) {
         )}
       </FormControl>
       }
-
-
-          {/* <Field name="member_type" as={TextField} label="Membership type"  />
-          <Field name="accomodation_type" as={TextField} label="Accomodation Type"  />
-          <Field name="conference_type" as={TextField} label="Type of conference"  />  */}
-           {showDatePickers && 
+      {showDatePickers && 
       <>
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth margin="normal"  name="checkin_date">
             <TextField
               id="checkin_date"
               name="checkin_date"
@@ -383,6 +412,7 @@ export default function AddEntryModal(props) {
                 max: "2023-06-11",
               }}
               onChange={handleCheckInDateChange}
+              required
             />
           </FormControl>
         
@@ -406,9 +436,12 @@ export default function AddEntryModal(props) {
             </FormControl>
           )}
           <Typography>Date Format: MM/DD/YYYY</Typography>
+         
+         
+          
           </>
         }
-         {showChecks && 
+      {showChecks && 
       <>
       <Typography sx={{marginTop:"5%",color:"#ef6223",fontWeight:"bold"}}>Workshp Titles(Attend any 2)</Typography>
       <FormControl component="fieldset" sx={{marginTop:"2%"}}>
@@ -442,6 +475,7 @@ export default function AddEntryModal(props) {
     <Typography><button style={clickhereButton} onClick={handleResetWorkshops}>Click here</button>to reset Workshops preferences</Typography>
     </>
     }
+          
           <FormControl>
             <InputLabel>Payment Status</InputLabel>
            <Field

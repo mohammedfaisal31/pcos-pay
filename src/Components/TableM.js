@@ -25,7 +25,7 @@ const TableM = () => {
   style.appendChild(document.createTextNode(styles));
   document.head.appendChild(style);
   
-  const [paymentStatusFilter, setPaymentStatusFilter] = useState('all');
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState('success');
   const [membershipTypeFilter, setMembershipTypeFilter] = useState('all');
   const [packageTypeFilter, setPackageTypeFilter] = useState('all');
   const [paymentMethodFilter, setPaymentMethodFilter] = useState('all');
@@ -48,7 +48,9 @@ const TableM = () => {
   };
   
   
-  
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [openAddEntryModal, setOpenAddEntryModal] = useState(false);
+    
   
   useEffect(() => {
     axios.get("https://kisargo.ml/api/getAllUsers/")
@@ -58,14 +60,13 @@ const TableM = () => {
     })
   
     
-  }, [])
+  }, [selectedRowData,openAddEntryModal])
   
   function zeroPad(num, length) {
     return num.toString().padStart(length, '0');
   }
   
     const [openDetailsModal, setOpenDetailsModal] = useState(false);
-    const [openAddEntryModal, setOpenAddEntryModal] = useState(false);
     const handleFullDetailsClick = (rowData)=>{
           setSelectedRowData(rowData);
           setOpenDetailsModal(true);
@@ -111,7 +112,6 @@ const TableM = () => {
   }
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [selectedRowData, setSelectedRowData] = useState(null);
   
 
 const [sendMailRowData, setSendMailRowData] = useState({});

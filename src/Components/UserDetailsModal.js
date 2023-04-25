@@ -1,13 +1,21 @@
-import { Backdrop, Box, CircularProgress, Dialog, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Modal, Select, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Backdrop, Box, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, InputLabel, MenuItem, Modal, Select, Stack, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { TextField, Button } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import CancelIcon from '@mui/icons-material/Cancel';
 import axios from 'axios';
 import SuccessSnackBar from './SuccessSnackBar';
+import dayjs from "dayjs";
 
-  
+const clickhereButton = {
+  background: "none",
+  border: "none",
+  color: "blue",
+  textDecoration: "underline",
+  cursor: "pointer",
+  marginTop:"2%"
+}
   const formattedData = (data)=>{
     if (!Array.isArray(data) || !data.length) {
       return [];
@@ -37,6 +45,37 @@ import SuccessSnackBar from './SuccessSnackBar';
     
   }
 export default function UserDetailsModal(props) {
+  
+  useEffect(() => {
+    if (props.data === null) console.log("Cannot set properties yet")
+    else {
+      if(props.data.package_type === "residential"){
+        setShowDatePickers(true);
+        setCheckInDate(props.data.check_in_date);
+        setCheckOutDate(props.data.check_out_date);
+        setAccomodationEnabled(true);
+        if(props.data.conference_type === "conference_type_1") setShowChecks(true);
+        else setShowChecks(false);
+        if(props.data.conference_type === "conference_type_1" || props.data.conference_type === "conference_type_2") setDaysToAddtoMax(2)
+        else setDaysToAddtoMax(1);
+      } 
+      else {
+        setAccomodationEnabled(false) 
+        setShowDatePickers(false);
+        if(props.data.conference_type === "conference_type_2" || props.data.conference_type === "conference_type_3") setShowChecks(true);
+        else setShowChecks(false);
+      }
+      if(props.data.member_type === "member"){
+        setShowMemNum(true);
+      }
+      else {
+        setShowMemNum(false);
+      }
+      setChecked(JSON.parse(props.data.workshop_titles))
+    }
+    
+  }, [props])
+  
   const validationSchema = Yup.object().shape({
     accomodation_type: Yup.string().required("accomodation type is required"),
     amount: Yup.number()
@@ -109,12 +148,38 @@ export default function UserDetailsModal(props) {
       const paymentStatusOptions = ["success", "failed", "pending"];
       const [showEditBackdrop ,setShowEditBackdrop] = useState(false);
       const [showSuccessBar ,setShowSuccessBar] = useState(false);
+      const [checkInDate, setCheckInDate] = useState(null);
+      const [memNumValid, setMemNumValid] = useState(true);
       
+      const [checkOutDate, setCheckOutDate] = useState(null);
+      
+      const [showChecks, setShowChecks] = useState(true);
+      const handleResetWorkshops = ()=>{
+        setChecked([]);
+      }
+
+      const [checked, setChecked] = useState([]);
+      const [accomodationEnabled, setAccomodationEnabled] = useState(false);
+      const [showMemNum, setShowMemNum] = useState(true);
+      const [showDatePickers, setShowDatePickers] = useState(true);
+      const [daysToAddtoMax,setDaysToAddtoMax] = useState(0);
+      
+      const canCheckMore = checked.length < 2;
+      const handleCheckChange = (event) => {
+        if (event.target.checked) {
+          // add checkbox to checked array if user checks it
+          setChecked([...checked, event.target.name]);
+        } else {
+          // remove checkbox from checked array if user unchecks it
+          setChecked(checked.filter((name) => name !== event.target.name));
+        }
+      };
       const handleCloseSuccessBar = ()=>{
         setShowSuccessBar(false);
       }
       const handleSubmit = (values) => {
           setShowEditBackdrop(true);
+          values.workshop_titles = JSON.stringify(checked);
           console.log(values);
           axios.post("https://kisargo.ml/api/updateTransactionData",values)
           .then((result)=>{
@@ -125,7 +190,11 @@ export default function UserDetailsModal(props) {
           .catch((err)=>console.log(err))
       };
 
-
+      const handleCheckInDateChange = (e) => {
+        setCheckInDate(e.target.value);
+        const minCheckOutDate = dayjs(e.target.value).add(daysToAddtoMax, "day").format("YYYY-MM-DD");
+        setCheckOutDate(minCheckOutDate);
+      };
     return (
     <Dialog
           open={props.openModal}
@@ -151,7 +220,7 @@ export default function UserDetailsModal(props) {
     initialValues={props.data}
     onSubmit={handleSubmit}
   >
-    {({ values, errors, touched }) => (
+    {({ values, errors, touched ,resetForm,setFieldValue}) => (
       <Form>
          <Stack spacing={2} sx={{marginTop:"5%"}}>
          
@@ -159,13 +228,318 @@ export default function UserDetailsModal(props) {
           <Field name="user_email" as={TextField} label="Email"  />
           <Field name="user_salutation" as={TextField} label="Salutation"  />
           <Field name="user_name" as={TextField} label="Name"  />
-          <Field name="accomodation_type" as={TextField} label="Accomodation Type"  />
-          <Field name="amount" as={TextField} label="Amount paid"  />
-          <Field name="conference_type" as={TextField} label="Type of conference"  />
-          <Field name="member_type" as={TextField} label="Membership type"  />
-          <Field name="package_type" as={TextField} label="Package Type"  />
+          <FormControl
+              fullWidth
+              margin="normal"
+              error={touched.package_type && Boolean(errors.package_type)}
+              InputLabelProps={{ shrink: true }}
+          >
+        <InputLabel htmlFor="package_type" >Package Type</InputLabel>
+        <Select
+          native
+          value={values.package_type}
+          label="Package type"
+          onChange={(e)=>{
+            resetForm();
+            setShowChecks(false);
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowMemNum(false);
+            handleResetWorkshops();
+            if(e.target.value === "residential") {
+              setAccomodationEnabled(true);
+            }
+            else {
+              setAccomodationEnabled(false);
+            }
+            
+              setFieldValue("package_type", e.target.value);
+          }}
+          inputProps={{
+            name: "package_type",
+            id: "package_type",
+          }}
+        >
+          <option value="" />
+          <option value="non_residential">Non Residential</option>
+          <option value="residential">Residential</option>
+        </Select>
+        {touched.package_type && errors.package_type && (
+          <FormHelperText>{errors.package_type}</FormHelperText>
+        )}
+      </FormControl>
+      
+      {accomodationEnabled && 
+      <FormControl
+        fullWidth
+        margin="normal"
+        error={touched.accomodation_type && Boolean(errors.accomodation_type)}
+      >
+        <InputLabel htmlFor="accomodation_type">Accomodation Type</InputLabel>
+        <Select
+          native
+          value={values.accomodation_type}
+          label="Accomodation Type"
+          onChange={(e)=>{
+            setShowChecks(false);
+            setFieldValue("accomodation_type", e.target.value);
+            setFieldValue("member_type", '');
+            setFieldValue("user_membership_number", '');
+            setFieldValue("conference_type", '');
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowMemNum(false);
+            
+            
+          }}
+          inputProps={{
+            name: "accomodation_type",
+            id: "accomodation_type",
+          }}
+        >
+          <option value=""></option>
+          <option value="single_room">Single Room</option>
+          <option value="twin_room">Twin Sharing per person</option>
+        </Select>
+        {accomodationEnabled && touched.accomodation_type && errors.accomodation_type && (
+          <FormHelperText>{errors.accomodation_type}</FormHelperText>
+        )}
+      </FormControl>}
+
+      <FormControl
+        fullWidth
+        margin="normal"
+        error={touched.member_type && Boolean(errors.member_type)}
+      >
+        <InputLabel htmlFor="member_type">Membership Type</InputLabel>
+        <Select
+          native
+          value={values.member_type}
+          label="Membership Type"
+          onChange={(e)=>{
+            if(e.target.value === "member") setShowMemNum(true);
+            else setShowMemNum(false);
+           setFieldValue("member_type", e.target.value);
+           setFieldValue("user_membership_number", '');
+           setFieldValue("conference_type", '');
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowChecks(false);
+          }}
+          inputProps={{
+            name: "member_type",
+            id: "member_type",
+          }}
+        >
+          <option value="" />
+          <option value="member">PCOS/ISAR/ASPIRE Members</option>
+          <option value="non_member">Non member</option>
+        </Select>
+        {touched.member_type && errors.member_type && (
+          <FormHelperText>{errors.member_type}</FormHelperText>
+        )}
+      </FormControl>
+
+      {showMemNum &&
+      <FormControl
+              fullWidth
+              margin="normal"
+              error={touched.membership_number && Boolean(errors.membership_number)}
+            
+          >
+      <>
+          
+      <TextField
+        value={values.user_membership_number}
+        label="Membership Number"
+        onChange={(e)=>{
+          setFieldValue("user_membership_number", e.target.value);
+          setMemNumValid(/^(LM|PM|AM|ASPIRE|ISAR|lm|pm|am|aspire|isar)-(\d{1,4}|\d{6})$/.test(e.target.value));
+          
+        }}
+        variant="outlined"
+        inputProps={{
+          name: "user_membership_number",
+          id: "user_membership_number",
+        }}
+      />
+      
+      <Typography>Example : </Typography>
+      <Typography><i>for</i> <span style={{fontWeight:"bold"}}>PCOS SOCIETY</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>LM-1234</span></Typography>
+      <Typography><i>for</i> <span style={{fontWeight:"bold"}}>ASPIRE</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>ASPIRE-0001</span></Typography>
+      <Typography><i>for</i> <span style={{fontWeight:"bold"}}>ISAR</span> <i>enter &gt;</i> <span style={{color:"rgb(239, 98, 35)",fontWeight:"bold"}}>ISAR-000001</span></Typography>
+      </>
+      
+      {touched.membership_number && errors.membership_number && (
+          <FormHelperText>{errors.membership_number}</FormHelperText>
+        )}
+    </FormControl>
+  }
+      {accomodationEnabled? 
+      <FormControl
+        fullWidth
+        margin="normal"
+        error={touched.member_type && Boolean(errors.member_type)}
+      >
+        <InputLabel htmlFor="conference_type">Conference Selection</InputLabel>
+        <Select
+          native
+          value={values.conference_type}
+          label="Conference Selection"
+          onChange={(e)=>{
+            if(e.target.value === "conference_type_1") setShowChecks(true);
+            else setShowChecks(false);
+            if(e.target.value === "conference_type_1" || e.target.value === "conference_type_2") setDaysToAddtoMax(2)
+            else setDaysToAddtoMax(1);
+            setFieldValue("conference_type", e.target.value);
+            setShowDatePickers(true);
+            setCheckInDate("");
+            setCheckOutDate("");
+            setChecked([]);
+            
+          }}
+          inputProps={{
+            name: "conference_type",
+            id: "conference_type",
+          }}
+        >
+          <option value=""></option>
+          <option value="conference_type_1">2 nights and 3 days - Conference + 2 Workshops</option>
+          <option value="conference_type_2">2 nights and 3 days - Conference only</option>
+          <option value="conference_type_3">1 nights and 2 days - Conference only</option>
+          
+        </Select>
+        {touched.conference_type && errors.conference_type && (
+          <FormHelperText>{errors.conference_type}</FormHelperText>
+        )}
+      </FormControl>
+      :
+      <FormControl
+        fullWidth
+        margin="normal"
+        error={touched.member_type && Boolean(errors.member_type)}
+      >
+        <InputLabel htmlFor="conference_type">Conference Selection</InputLabel>
+        <Select
+          native
+          value={values.conference_type}
+          label = "Conference Selection"
+          onChange={(e)=>{
+            if(e.target.value === "conference_type_2" || e.target.value === "conference_type_3") setShowChecks(true)
+            else setShowChecks(false);
+            setFieldValue("conference_type", e.target.value);
+            setCheckInDate("");
+            setCheckOutDate("");
+            setChecked([]);
+          }}
+          inputProps={{
+            name: "conference_type",
+            id: "conference_type",
+          }}
+        >
+          <option value=""></option>
+          <option value="conference_type_1">Conference only</option>
+          <option value="conference_type_2">Conference + 2 Workshops</option>
+          <option value="conference_type_3">Post Graduate Students Conference + 2 Workshops</option>
+          
+        </Select>
+        {touched.conference_type && errors.conference_type && (
+          <FormHelperText>{errors.conference_type}</FormHelperText>
+        )}
+      </FormControl>
+      }
+      {showDatePickers && 
+      <>
+      <FormControl fullWidth margin="normal"  name="checkin_date">
+            <TextField
+              id="checkin_date"
+              name="checkin_date"
+              label="Check-in Date"
+              type="date"
+              value={checkInDate}
+              InputLabelProps={{
+                shrink: true,
+              }} 
+              inputProps={{
+                min: "2023-06-09",
+                max: "2023-06-11",
+              }}
+              onChange={handleCheckInDateChange}
+              required
+            />
+          </FormControl>
+        
+          {checkInDate && (
+            <FormControl fullWidth margin="normal">
+              <TextField
+                id="checkout_date"
+                name="checkout_date"
+                label="Check-out Date"
+                type="date"
+                value={checkOutDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  min: dayjs(checkInDate).add(daysToAddtoMax, "day").format("YYYY-MM-DD"),
+                  max: dayjs(checkInDate).add(daysToAddtoMax, "day").format("YYYY-MM-DD"),
+                }}
+                onChange={(e) => setCheckOutDate(e.target.value)}
+              />
+            </FormControl>
+          )}
+          <Typography>Date Format: MM/DD/YYYY</Typography>
+         
+         
+          
+          </>
+        }
+      {showChecks && 
+      <>
+      <Typography sx={{marginTop:"5%",color:"#ef6223",fontWeight:"bold"}}>Workshp Titles(Attend any 2)</Typography>
+      <FormControl component="fieldset" sx={{marginTop:"2%"}}>
+      <FormGroup>
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check1')} onChange={handleCheckChange} name="check1"  />}
+          label="Insulin Resistance in PCOS"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check2')} onChange={handleCheckChange} name="check2"  />}
+          label="Embryo Biopsy and PGT"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check3')} onChange={handleCheckChange} name="check3"  />}
+          label="Body Image and PCOS"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check4')} onChange={handleCheckChange} name="check4"  />}
+          label="Ultrasound in PCOS"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check5')} onChange={handleCheckChange} name="check5"  />}
+          label="Vitrification of Oocytes and Embryos"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={checked.includes('check6')} onChange={handleCheckChange} name="check6"  />}
+          label="Errors in ART"
+        />
+      </FormGroup>
+    </FormControl>
+    <Typography><button style={clickhereButton} onClick={handleResetWorkshops}>Click here</button>to reset Workshops preferences</Typography>
+    </>
+    }
+   
+   
+   
+          <Field name="amount" as={TextField} label="Amount paid(Including GST)"  />
           <Field name="paymentID" as={TextField} label="Payment ID"  />
-           <FormControl>
+           <FormControl name="paymentStatus">
             <InputLabel>Payment Status</InputLabel>
            <Field
                 id="paymentStatus"
@@ -193,11 +567,7 @@ export default function UserDetailsModal(props) {
           <Field name="user_diet" as={TextField} label="Diet"  />
           <Field name="user_institution" as={TextField} label="Institution"  />
           <Field name="user_medical_council_number" as={TextField} label="Medical Council Number"  />
-          <Field name="user_membership_number" as={TextField} label="Membership Number"  />
           <Field name="user_sex" as={TextField} label="Sex"  />
-          <Field name="workshop_titles" as={TextField} label="Workshop Titles"  />
-          <Field name="check_in_date" as={TextField} label="Check In date"  />
-          <Field name="check_out_date" as={TextField} label="Check out Date"  />
           <Field name="payment_method" as={TextField} label="Payment Method"  />
           
           <Grid container>

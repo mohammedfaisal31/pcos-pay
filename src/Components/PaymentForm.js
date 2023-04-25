@@ -23,6 +23,7 @@ import {
 import axios from "axios";
 import { GatewayDataContext } from "./Context/GatewayDataContext";
 import AgreementWrapper from "./AgreementWrapper";
+import ErrorSnackbar from "./ErrorSnackBar";
 
 const validationSchema = Yup.object().shape({
   package_type: Yup.string().required("Required"),
@@ -160,7 +161,7 @@ const PaymentForm = () => {
   const [checked, setChecked] = useState([]);
   const [showChecks, setShowChecks] = useState(false);
   const [showMemNum, setShowMemNum] = useState(false);
-
+  const [memNumValid, setMemNumValid] = useState(true);
   const [showCheque, setShowCheque] = useState(false);
 
   const handleCheckChange = (event) => {
@@ -283,6 +284,12 @@ const PaymentForm = () => {
           onChange={(e)=>{
             formik.resetForm();
             setShowChecks(false);
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowMemNum(false);
+            setPayNow(false);
             handleResetWorkshops();
             if(e.target.value === "residential") {
               setAccomodationEnabled(true);
@@ -290,7 +297,7 @@ const PaymentForm = () => {
             else {
               setAccomodationEnabled(false);
             }
-            setPayNow(false);
+            
             formik.setFieldValue("package_type", e.target.value);
           }}
           inputProps={{
@@ -322,12 +329,24 @@ const PaymentForm = () => {
             setShowChecks(false);
             setPayNow(false);
             formik.setFieldValue("accomodation_type", e.target.value);
+            formik.setFieldValue("member_type", '');
+            formik.setFieldValue("membership_number", '');
+            formik.setFieldValue("conference_type", '');
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowMemNum(false);
+            setPayNow(false);
+            
+            
           }}
           inputProps={{
             name: "accomodation_type",
             id: "accomodation_type",
           }}
         >
+          <option value=""></option>
           <option value="single_room">Single Room</option>
           <option value="twin_room">Twin Sharing per person</option>
         </Select>
@@ -349,8 +368,15 @@ const PaymentForm = () => {
           onChange={(e)=>{
             if(e.target.value === "member") setShowMemNum(true);
             else setShowMemNum(false);
-            setPayNow(false);
             formik.setFieldValue("member_type", e.target.value);
+            formik.setFieldValue("membership_number", '');
+            formik.setFieldValue("conference_type", '');
+            setChecked([])
+            setCheckInDate("");
+            setCheckOutDate("");
+            setShowDatePickers(false);
+            setShowChecks(false);
+            setPayNow(false);
           }}
           inputProps={{
             name: "member_type",
@@ -379,8 +405,10 @@ const PaymentForm = () => {
         label="Membership Number"
         onChange={(e)=>{
           formik.setFieldValue("membership_number", e.target.value);
+          setMemNumValid(/^(LM|PM|AM|ASPIRE|ISAR|lm|pm|am|aspire|isar)-(\d{1,4}|\d{6})$/.test(e.target.value));
+          setPayNow(false);
+
         }}
-        defaultValue="ab-000"
         variant="outlined"
         inputProps={{
           name: "membership_number",
@@ -413,11 +441,14 @@ const PaymentForm = () => {
           onChange={(e)=>{
             if(e.target.value === "conference_type_1") setShowChecks(true)
             else setShowChecks(false);
-            setPayNow(false);
-            setShowDatePickers(true);
             if(e.target.value === "conference_type_1" || e.target.value === "conference_type_2") setDaysToAddtoMax(2)
             else setDaysToAddtoMax(1);
             formik.setFieldValue("conference_type", e.target.value);
+            setPayNow(false);
+            setShowDatePickers(true);
+            setCheckInDate("");
+            setCheckOutDate("");
+            setChecked([]);
             
           }}
           inputProps={{
@@ -449,8 +480,11 @@ const PaymentForm = () => {
           onChange={(e)=>{
             if(e.target.value === "conference_type_2" || e.target.value === "conference_type_3") setShowChecks(true)
             else setShowChecks(false);
-            setPayNow(false);
             formik.setFieldValue("conference_type", e.target.value);
+            setPayNow(false);
+            setCheckInDate("");
+            setCheckOutDate("");
+            setChecked([]);
           }}
           inputProps={{
             name: "conference_type",
@@ -470,7 +504,7 @@ const PaymentForm = () => {
       }
       {showDatePickers && 
       <>
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth margin="normal"  name="checkin_date">
             <TextField
               id="checkin_date"
               name="checkin_date"
@@ -485,6 +519,7 @@ const PaymentForm = () => {
                 max: "2023-06-11",
               }}
               onChange={handleCheckInDateChange}
+              required
             />
           </FormControl>
         
@@ -508,6 +543,14 @@ const PaymentForm = () => {
             </FormControl>
           )}
           <Typography>Date Format: MM/DD/YYYY</Typography>
+          <div style={{textAlign:"left"}}>
+                        <ul>
+                        <li>In case additional room night is required for 1 more day, please contact us by 30th April </li>
+                        <br/>
+                        <li>After 16th May - contact Dr Madhuri Patil @ <span style={{color:"blue"}}>drmadhuripatil59@gmail.com</span> or <span style={{color:"blue"}}>pcosart2023@gmail.com</span> if accommodation is required</li>
+                        </ul>
+        </div>
+          
           </>
         }
       {showChecks && 
@@ -553,7 +596,7 @@ const PaymentForm = () => {
         <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ac2642"}}  onClick={createPaymentRequest}>
           PAY NOW
         </Button>
-        <Typography style={{marginTop:"5%"}}>Note : 3.64% online payments charges are applicable</Typography>
+        <Typography style={{marginTop:"5%"}}>Note : 3%(+18% GST) online payments charges are applicable</Typography>
         </div> :
       <>
             <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ef6223"}} >
@@ -565,6 +608,7 @@ const PaymentForm = () => {
       <Typography><button style={clickhereButton} onClick={handleOpenModal}>Click here</button>to view the rate card</Typography>
       
     </form>
+    <ErrorSnackbar open={!memNumValid} message="Membership number is invalid"/>
     <Dialog
         open={openModal}
         onClose={handleModalClose}
@@ -601,31 +645,7 @@ const PaymentForm = () => {
         </DialogTitle>
        <DialogContent>
          
-          {/* <FormControl sx={{width:"20%",marginTop:"3%",marginBottom:"3%"}} >
-            <InputLabel>Payment Type</InputLabel>
-            <Select label="Payment Type" onChange={handleOfflinePaymentMethodChange} value={offlinePaymentMethod}>
-              <MenuItem value="neft">NEFT/RTGS</MenuItem>
-              <MenuItem value="cheque">Cheque/DD</MenuItem>
-            </Select>
-          </FormControl>
-
-          {
-            showCheque ? 
-              <>
-              <Typography><Typography sx={{color:"#ac2642"}} >DD/Cheque</Typography> in favour of "<b>THE PCOS SOCIETY </b>"</Typography>
-              <Typography sx={{color:"#ac2642"}} >Cheque to be mailed to</Typography> 
-              <Typography>xyz</Typography>
-              </>
-              :
-              <>
-              <Typography><Typography sx={{color:"#ac2642"}} >Account No</Typography> <b>1234567890 </b></Typography>
-              <Typography>xyz</Typography>
-              </>
-              
-
-
-          
-          } */}
+         
 
 <TableContainer >
 <Table sx={{marginTop:"2%"}}>
@@ -637,11 +657,11 @@ const PaymentForm = () => {
       </TableHead>
       <TableBody>
         <TableRow>
-          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Account No : 840510210000006</TableCell>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}><div><ul><li>Account No : 840510210000006</li><li>Name : "THE PCOS SOCIETY"</li><li>RTGS/IFSC code: BKID0008405</li><li>MICR Code: 560013006</li><li>Branch: Jayanagar</li></ul></div></TableCell>
           <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>DD/cheque in favor of "THE PCOS SOCIETY"</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Bank name and adress : Bank of India , 623 10TH A MAIN NE, MAIN BUS STOP 4TH B, BANGALORE, KARNATAKA , 560011 <br/> RTGS/IFSC code: BKID0008405 </TableCell>
+          <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Bank name and adress : Bank of India, 623, 10th A Main RD, Main Bus Stop, 4th Block, Jayanagar, Bangalore, Karnataka, 560011 <br/>  </TableCell>
           <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}><Typography sx={{color:"red"}}>Cheque to be mailed To:</Typography> Dr.Patil's Fertility and Endoscopy,No 1 Uma Admirality,First floor, Above HDFC Bank,Near Jal Bhavan,Bannerghatta Road,Bengaluru 560029</TableCell>
         </TableRow>
         </TableBody>
