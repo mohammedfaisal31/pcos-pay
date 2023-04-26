@@ -313,7 +313,7 @@ useEffect(() => {
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Payment Status</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Payment Method</TableCell>
                 <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Edit Full Details</TableCell>
-                <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Send Email Receipt</TableCell>
+                <TableCell sx={{color:"#fff",fontWeight:"bold"}}>Send Confirmation Email</TableCell>
 
               </TableRow>
             </TableHead>

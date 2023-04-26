@@ -1,5 +1,5 @@
 import React,{useState,useContext,useEffect} from "react";
-import { Field, Form, useFormik } from "formik";
+import { Field, Form, Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
 import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress, TableContainer } from '@mui/material';
@@ -102,22 +102,19 @@ const PaymentForm = () => {
   
   const [showDatePickers, setShowDatePickers] = useState(false);
   const [daysToAddtoMax,setDaysToAddtoMax] = useState(0);
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit:  (values) => {
+   const handleSubmit =   (values) => {
       console.log(values);
       axios.post('https://kisargo.ml/api/fetch-price', values)
       .then((result)=>{
         setaAmountTitle(result.data.title);
         setTotalAmount(result.data.total_amount);
-        setPaymentPurpose(result.data.purpose)
+        setPaymentPurpose(result.data.purpose);
         setGatewayRedirectData({...gatewayData,title:result.data.title,amount:result.data.total_amount,purpose:result.data.purpose,values,workshop_titles:checked,check_in_date:checkInDate,check_out_date:checkOutDate})
         setPayNow(true);
       })
       .catch((err)=>console.log(err))
-    },
-  });
+    }
+  
   const createPaymentRequest = ()=>{
     console.log(gatewayRedirectData)
     showPaymentPrompt()
@@ -148,7 +145,6 @@ const PaymentForm = () => {
     });
     
   }
-  const { values, handleChange, handleSubmit, errors, touched } = formik;
 
   const handleOpenModal = ()=>{
     setOpenModal(true);
@@ -269,7 +265,9 @@ const PaymentForm = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
         <Typography>Please determine your coverage</Typography>
-          <form onSubmit={handleSubmit}>
+          <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
+          {({ values, errors, touched ,resetForm,setFieldValue}) => (
+            <Form>
             <FormControl
               fullWidth
               margin="normal"
@@ -282,7 +280,7 @@ const PaymentForm = () => {
           value={values.package_type}
           label="Package type"
           onChange={(e)=>{
-            formik.resetForm();
+            resetForm();
             setShowChecks(false);
             setChecked([])
             setCheckInDate("");
@@ -298,7 +296,7 @@ const PaymentForm = () => {
               setAccomodationEnabled(false);
             }
             
-            formik.setFieldValue("package_type", e.target.value);
+            setFieldValue("package_type", e.target.value);
           }}
           inputProps={{
             name: "package_type",
@@ -328,10 +326,10 @@ const PaymentForm = () => {
           onChange={(e)=>{
             setShowChecks(false);
             setPayNow(false);
-            formik.setFieldValue("accomodation_type", e.target.value);
-            formik.setFieldValue("member_type", '');
-            formik.setFieldValue("membership_number", '');
-            formik.setFieldValue("conference_type", '');
+            setFieldValue("accomodation_type", e.target.value);
+            setFieldValue("member_type", '');
+            setFieldValue("membership_number", '');
+            setFieldValue("conference_type", '');
             setChecked([])
             setCheckInDate("");
             setCheckOutDate("");
@@ -368,9 +366,9 @@ const PaymentForm = () => {
           onChange={(e)=>{
             if(e.target.value === "member") setShowMemNum(true);
             else setShowMemNum(false);
-            formik.setFieldValue("member_type", e.target.value);
-            formik.setFieldValue("membership_number", '');
-            formik.setFieldValue("conference_type", '');
+            setFieldValue("member_type", e.target.value);
+            setFieldValue("membership_number", '');
+            setFieldValue("conference_type", '');
             setChecked([])
             setCheckInDate("");
             setCheckOutDate("");
@@ -404,7 +402,7 @@ const PaymentForm = () => {
         value={values.membership_number}
         label="Membership Number"
         onChange={(e)=>{
-          formik.setFieldValue("membership_number", e.target.value);
+          setFieldValue("membership_number", e.target.value);
           setMemNumValid(/^(LM|PM|AM|ASPIRE|ISAR|lm|pm|am|aspire|isar)-(\d{1,4}|\d{6})$/.test(e.target.value));
           setPayNow(false);
 
@@ -443,7 +441,7 @@ const PaymentForm = () => {
             else setShowChecks(false);
             if(e.target.value === "conference_type_1" || e.target.value === "conference_type_2") setDaysToAddtoMax(2)
             else setDaysToAddtoMax(1);
-            formik.setFieldValue("conference_type", e.target.value);
+            setFieldValue("conference_type", e.target.value);
             setPayNow(false);
             setShowDatePickers(true);
             setCheckInDate("");
@@ -480,7 +478,7 @@ const PaymentForm = () => {
           onChange={(e)=>{
             if(e.target.value === "conference_type_2" || e.target.value === "conference_type_3") setShowChecks(true)
             else setShowChecks(false);
-            formik.setFieldValue("conference_type", e.target.value);
+            setFieldValue("conference_type", e.target.value);
             setPayNow(false);
             setCheckInDate("");
             setCheckOutDate("");
@@ -606,8 +604,9 @@ const PaymentForm = () => {
       </>  
       }
       <Typography><button style={clickhereButton} onClick={handleOpenModal}>Click here</button>to view the rate card</Typography>
-      
-    </form>
+      </Form>
+      )}
+    </Formik>
     <ErrorSnackbar open={!memNumValid} message="Membership number is invalid"/>
     <Dialog
         open={openModal}
