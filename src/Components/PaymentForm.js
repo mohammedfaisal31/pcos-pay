@@ -1,8 +1,8 @@
 import React,{useState,useContext,useEffect} from "react";
-import { Field, Form, Formik, useFormik } from "formik";
+import { ErrorMessage, Field, Form, Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
-import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress, TableContainer } from '@mui/material';
+import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress, TableContainer, RadioGroup, Radio } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import Swal from 'sweetalert';
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@mui/material';
@@ -27,10 +27,20 @@ import ErrorSnackbar from "./ErrorSnackBar";
 
 const validationSchema = Yup.object().shape({
   package_type: Yup.string().required("Required"),
+  accomodation_type: Yup.string().when("package_type", {
+    is: "residential"  ,
+    then: ()=>  Yup.string().required("Required") ,
+    otherwise: ()=> Yup.string().notRequired(),
+  }),
   member_type: Yup.string().required("Required"),
   membership_number: Yup.string().when("member_type", {
     is: "member"  ,
     then: ()=>  Yup.string().matches(/^(LM|PM|AM|ASPIRE|ISAR)-(\d{1,4}|\d{6})$/i,"Please enter a valid membership number").required("Membership number is required") ,
+    otherwise: ()=> Yup.string().notRequired(),
+  }),
+  accompanying_person_enabled :Yup.string().when("accomodation_type", {
+    is: "single_room"  ,
+    then: ()=>  Yup.string().required("Please select an option"),
     otherwise: ()=> Yup.string().notRequired(),
   }),
     
@@ -41,20 +51,24 @@ const initialValues = {
   package_type: "",
   member_type: "",
   conference_type:"",
-  accomodation_type:"single_room",
+  accomodation_type:"",
   workshop_titles : [],
   membership_number:"",
   check_in_date:"",
-  check_out_date:""
+  check_out_date:"",
+  accompanying_person_enabled:""
 
 };
 
 function formatRupee(amount) {
-  return amount.toLocaleString('en-IN', {
+  return amount !== undefined ? 
+  amount.toLocaleString('en-IN', {
     style: 'currency',
     currency: 'INR',
     minimumFractionDigits: 0
-  });
+  })
+  : 
+  ""
 }
 
 const box_style = {
@@ -84,7 +98,8 @@ const PaymentForm = () => {
   const [amountTitle, setaAmountTitle] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
   const [paymentPurpose, setPaymentPurpose] = useState("");
-  
+  const[showAccompanyingPerson,setShowAccompanyingPerson] = useState(false);
+  const [accompanyingPersonOption, setAccompanyingPersonOption] = useState("");
   const [payNow, setPayNow] = useState(false);
   const [accomodationEnabled, setAccomodationEnabled] = useState(false);
   
@@ -106,10 +121,24 @@ const PaymentForm = () => {
       console.log(values);
       axios.post('https://kisargo.ml/api/fetch-price', values)
       .then((result)=>{
+        console.log(result.data);
+         if(result.data.accompanying_total_amount !== undefined){
+           console.log(result.data.accompanying_total_amount);
+           setShowAccompanyingPersonDescirption(true);
+           setAccompanyingTitle(result.data.accompanying_title)
+           setAccompanyingGSTAmount(result.data.accompanying_gst_amount)
+           setAccompanyingAmountWithoutGST(result.data.accompanying_amount_without_gst)
+           setAccompanyingTotalAmount(result.data.accompanying_total_amount)
+         }
+         else{
+          setShowAccompanyingPersonDescirption(false);
+         }
+         setGSTAmount(result.data.gst_amount);
+        setAmountWithoutGST(result.data.amount_without_gst)
         setaAmountTitle(result.data.title);
         setTotalAmount(result.data.total_amount);
         setPaymentPurpose(result.data.purpose);
-        setGatewayRedirectData({...gatewayData,title:result.data.title,amount:result.data.total_amount,purpose:result.data.purpose,values,workshop_titles:checked,check_in_date:checkInDate,check_out_date:checkOutDate})
+        setGatewayRedirectData({...gatewayData,title:result.data.title,amount:result.data.total_amount,purpose:result.data.purpose,values,workshop_titles:checked,check_in_date:checkInDate,check_out_date:checkOutDate,accompanying_total_amount:result.data.accompanying_total_amount})
         setPayNow(true);
       })
       .catch((err)=>console.log(err))
@@ -153,6 +182,17 @@ const PaymentForm = () => {
   const handleModalClose = ()=>{
     setOpenModal(false);
   }
+
+  const [amount_without_gst,setAmountWithoutGST] = useState(0);
+  const [gst_amount,setGSTAmount] = useState(0);
+  
+
+  const [showAccompanyingPersonDescirption, setShowAccompanyingPersonDescirption] = useState(false);
+  const [accompanying_title, setAccompanyingTitle] = useState("")
+  const [accompanying_gst_amount, setAccompanyingGSTAmount] = useState(0)
+  const [accompanying_amount_without_gst, setAccompanyingAmountWithoutGST] = useState(0)
+  const [accompanying_total_amount, setAccompanyingTotalAmount] = useState(0)
+
 
   const [checked, setChecked] = useState([]);
   const [showChecks, setShowChecks] = useState(false);
@@ -256,6 +296,50 @@ const PaymentForm = () => {
     setCheckOutDate(minCheckOutDate);
   };
 
+  
+const table = (
+  <table>
+    <tr>
+      <td>Row 1 Column 1</td>
+      <td>Row 1 Column 2</td>
+    </tr>
+    <tr>
+      <td>Row 2 Column 1</td>
+      <td>Row 2 Column 2</td>
+    </tr>
+    <tr>
+      <td>Row 3 Column 1</td>
+      <td>Row 3 Column 2</td>
+    </tr>
+    <tr>
+      <td>Row 4 Column 1</td>
+      <td>Row 4 Column 2</td>
+    </tr>
+  </table>
+);
+
+const firePayNow = ()=> {
+  return Swal({
+    title: 'Package confirmation',
+    html: table,
+    buttons: {
+            offline:{
+              text:"Cancel",
+              value:"cancel"
+            },
+            online:{
+              text:"Pay now",
+              value:"pay_now"
+            }
+            
+    }
+    
+    
+  })
+}
+
+
+
   return (
     <>
     <Backdrop
@@ -288,6 +372,7 @@ const PaymentForm = () => {
             setShowDatePickers(false);
             setShowMemNum(false);
             setPayNow(false);
+            setShowAccompanyingPerson(false);
             handleResetWorkshops();
             if(e.target.value === "residential") {
               setAccomodationEnabled(true);
@@ -327,6 +412,7 @@ const PaymentForm = () => {
             setShowChecks(false);
             setPayNow(false);
             setFieldValue("accomodation_type", e.target.value);
+            
             setFieldValue("member_type", '');
             setFieldValue("membership_number", '');
             setFieldValue("conference_type", '');
@@ -337,6 +423,12 @@ const PaymentForm = () => {
             setShowMemNum(false);
             setPayNow(false);
             
+            if(e.target.value === "single_room") setShowAccompanyingPerson(true);
+            else {
+              setShowAccompanyingPerson(false);
+              setFieldValue("accompanying_person_enabled","not_needed");
+              setAccompanyingTotalAmount(0);
+            }
             
           }}
           inputProps={{
@@ -344,14 +436,58 @@ const PaymentForm = () => {
             id: "accomodation_type",
           }}
         >
-          <option value=""></option>
+          <option value="" />
           <option value="single_room">Single Room</option>
           <option value="twin_room">Twin Sharing per person</option>
+         
         </Select>
         {accomodationEnabled && touched.accomodation_type && errors.accomodation_type && (
           <FormHelperText>{errors.accomodation_type}</FormHelperText>
         )}
       </FormControl>}
+      
+      {showAccompanyingPerson && 
+        <>
+        <div>
+          <Typography sx={{marginTop:"2%",color:"#ef6223",fontWeight:"bold"}}>Accompanying Person for Residential Package</Typography>
+          <ul>
+            <li><Typography>Rs 11,000 + 1980 (18% GST) = 12980 (Includes 2 breakfasts, 2 lunches, 1 dinner for 2 nights and 3 days package) </Typography></li>
+            <li><Typography>Rs 9,500 + 1710 (18% GST) = 11210 (Includes 1 breakfast, 2 lunches, 1 dinner for 1 nights and 2 days package) </Typography></li>
+            
+          </ul>
+        </div>
+        <FormControl component="fieldset" sx={{marginTop:"2%",textAlign:"left"}} required>
+        <RadioGroup value={accompanyingPersonOption} onChange={(e)=>{
+           if(e.target.value === "not_needed") setAccompanyingTotalAmount(0);
+          setAccompanyingPersonOption(e.target.value);
+          setPayNow(false);
+        }}>
+          <Field name="accompanying_person_enabled" type="radio" value="needed" style={{marginTop:"2%"}} required>
+            {({ field }) => (
+              <FormControlLabel
+                control={<Radio {...field} />}
+                label="I need Additional accommodation for accompanying person"
+              />
+            )}
+          </Field>
+          <Field name="accompanying_person_enabled" type="radio" value="not_needed" style={{marginTop:"2%"}} required> 
+            {({ field }) => (
+              <FormControlLabel
+                control={<Radio {...field} />}
+                label={<Typography>No, I do not need additional accommodation </Typography>}
+                sx={{marginTop:"4%",marginBottom:"2%"}}
+              />
+            )}
+          </Field>
+        </RadioGroup>
+        {touched.accompanying_person_enabled && errors.accompanying_person_enabled && (
+          <>
+          <ErrorSnackbar open={errors.accompanying_person_enabled} message="Please specify if additional accommodation is required"/>
+          <FormHelperText sx={{color:"red",fontWeight:"bold",fontSize:"large"}}>{errors.accompanying_person_enabled}</FormHelperText></>
+        )}
+      </FormControl>
+      </>
+      }
 
       <FormControl
         fullWidth
@@ -513,8 +649,8 @@ const PaymentForm = () => {
                 shrink: true,
               }} 
               inputProps={{
-                min: "2023-06-09",
-                max: "2023-06-11",
+                min: "2023-06-08",
+                max: "2023-06-12",
               }}
               onChange={handleCheckInDateChange}
               required
@@ -588,16 +724,59 @@ const PaymentForm = () => {
       
       {
         payNow ? 
-        <div style={{marginTop:"8%"}}><Typography >Package value : {amountTitle}</Typography>
-        <Typography style={{color:"#b00020"}}>To pay : {formatRupee(totalAmount)}</Typography>
+        <>
+          <TableContainer >
+              <Table sx={{marginTop:"2%"}}>
+                <TableHead sx={{backgroundColor:"#ac2642"}}>
+                  <TableRow>
+                    <TableCell sx={{ border: '1px solid black',color:"#fff",fontWeight:"bold" }}>Description</TableCell>
+                    <TableCell sx={{ border: '1px solid black',color:"#fff",fontWeight:"bold" }}>Amount</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Package Value</TableCell>
+                    <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>
+                      <ul>
+                        <li><Typography>SubTotal : <span style={{fontWeight:"bold"}}>{formatRupee(amount_without_gst)}</span></Typography></li>
+                        <li><Typography>GST (18%) : <span style={{fontWeight:"bold"}}>{formatRupee(gst_amount)}</span></Typography></li>
+                        <li><Typography>Total amount : <span style={{fontWeight:"bold"}}>{formatRupee(totalAmount)}</span></Typography></li>
+                      </ul>
+                    </TableCell>
+                  </TableRow>
+                  {showAccompanyingPersonDescirption &&
+                  <TableRow>
+                    <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Accompanying person package</TableCell>
+                    <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>
+                      <ul>
+                        <li><Typography>SubTotal : <span style={{fontWeight:"bold"}}>{formatRupee(accompanying_amount_without_gst)}</span></Typography></li>
+                        <li><Typography>GST (18%) : <span style={{fontWeight:"bold"}}>{formatRupee(accompanying_gst_amount)}</span></Typography></li>
+                        <li><Typography>Total amount : <span style={{fontWeight:"bold"}}>{formatRupee(accompanying_total_amount)}</span></Typography></li>
+                      </ul>
+                    </TableCell>
+                  </TableRow>}
+                  <TableRow>
+                    <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>Total Amount to be paid(including GST)</TableCell>
+                    <TableCell sx={{ border: '1px solid black',fontWeight:"bold" }}>
+                      <Typography sx={{fontWeight:"bold",color:"#ef6223"}}>{formatRupee(accompanying_total_amount+totalAmount)}</Typography>
+                    </TableCell>
+                  </TableRow>
+                  </TableBody>
+              </Table>
+              <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ac2642"}}  onClick={createPaymentRequest}>
+               PAY NOW
+              </Button>
         
-        <Button  variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ac2642"}}  onClick={createPaymentRequest}>
-          PAY NOW
-        </Button>
-        <Typography style={{marginTop:"5%"}}>Note : 3%(+18% GST) online payments charges are applicable</Typography>
-        </div> :
+    </TableContainer>
+        </>
+        // <div style={{marginTop:"8%"}}><Typography >Package value : {amountTitle}</Typography>
+        // <Typography style={{color:"#b00020"}}>To pay : {formatRupee(totalAmount)}</Typography>
+        
+        // <Typography style={{marginTop:"5%"}}>Note : 3%(+18% GST) online payments charges are applicable</Typography>
+        // </div> :
+      :
       <>
-            <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ef6223"}} >
+            <Button type="submit" variant="contained" color="primary" fullWidth style={{marginTop:"5%",backgroundColor:"#ef6223"}}  >
               SUBMIT
             </Button>
             

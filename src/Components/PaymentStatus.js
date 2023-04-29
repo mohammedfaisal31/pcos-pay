@@ -18,14 +18,14 @@ export default function PaymentStatus() {
                 console.log(result);
                 if(result.data.paymentStatus === 'success'){
                     console.log("Email sending is blocked")
-                    // setSuccess(true);
-                    // axios.get(`https://kisargo.ml/send-invoice/${transaction_id}`)
-                    // .then((result)=>{
-                    //     if(result.data === "Email sent successfully") setEmailSent(true);
-                    //     console.log(result.data);
+                    setSuccess(true);
+                    axios.get(`https://kisargo.ml/send-invoice/${transaction_id}`)
+                    .then((result)=>{
+                        if(result.data === "Email sent successfully") setEmailSent(true);
+                        console.log(result.data);
                         
-                    // })
-                    // .catch((err)=>console.log(err));
+                    })
+                    .catch((err)=>console.log(err));
                 }
                 else if (result.data.paymentStatus === 'failed'){
                     setFailed(true);

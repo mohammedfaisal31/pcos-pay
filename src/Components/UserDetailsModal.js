@@ -1,4 +1,4 @@
-import { Backdrop, Box, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, InputLabel, MenuItem, Modal, Select, Stack, Typography } from '@mui/material'
+import { Backdrop, Box, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, Grid, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { TextField, Button } from "@mui/material";
 import { Formik, Form, Field } from "formik";
@@ -7,6 +7,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import axios from 'axios';
 import SuccessSnackBar from './SuccessSnackBar';
 import dayjs from "dayjs";
+import ErrorSnackbar from './ErrorSnackBar';
 
 const clickhereButton = {
   background: "none",
@@ -72,6 +73,26 @@ export default function UserDetailsModal(props) {
         setShowMemNum(false);
       }
       setChecked(JSON.parse(props.data.workshop_titles))
+
+      if(props.data.package_type === "residential" && props.data.accomodation_type === "single_room") setShowAccompanyingPersonOption(true)
+      else setShowAccompanyingPersonOption(false);
+
+      if(props.data.accompanying_total_amount !== 0){
+        setAccompanyingPersonOption("needed")
+        setShowAccompanyingPersonOption(true);
+      }
+      else {
+        setAccompanyingPersonOption("not_needed")
+      }
+      if(props.data.amount !== 0){
+        setAmountPaid(props.data.amount)
+      }
+      else {
+        setAmountPaid(0)
+      }
+      
+      if(props.data.accompanying_total_amount && props.data.amount) setGrandTotalAmount(props.data.accompanying_total_amount+props.data.amount)
+     
     }
     
   }, [props])
@@ -90,6 +111,11 @@ export default function UserDetailsModal(props) {
     payment_purpose: Yup.string().required("Payment purpose is required"),
     time_of_transaction: Yup.date().required("Time of transaction is required"),
     transaction_id: Yup.string().required("Transaction ID is required"),
+    accompanying_person_enabled :Yup.string().when("accomodation_type", {
+      is: "single_room"  ,
+      then: ()=>  Yup.string().required("Please select an option"),
+      otherwise: ()=> Yup.string().notRequired(),
+    }),
     // user_address: Yup.string().required("User address is required"),
     // user_age: Yup.number().required("User age is required").positive("User age must be positive"),
     // user_city: Yup.string().required("User city is required"),
@@ -150,7 +176,11 @@ export default function UserDetailsModal(props) {
       const [showSuccessBar ,setShowSuccessBar] = useState(false);
       const [checkInDate, setCheckInDate] = useState(null);
       const [memNumValid, setMemNumValid] = useState(true);
-      
+      const [accompanyingPersonOption, setAccompanyingPersonOption] = useState("");
+      const [showAccompanyingPersonOption, setShowAccompanyingPersonOption] = useState("");
+      const [amount_paid, setAmountPaid] = useState(0);
+      const [accompanying_amount, setAccompanyingAmount] = useState(0)
+      const[grandTotalAmount,setGrandTotalAmount] = useState(0);
       const [checkOutDate, setCheckOutDate] = useState(null);
       
       const [showChecks, setShowChecks] = useState(true);
@@ -223,8 +253,7 @@ export default function UserDetailsModal(props) {
     {({ values, errors, touched ,resetForm,setFieldValue}) => (
       <Form>
          <Stack spacing={2} sx={{marginTop:"5%"}}>
-         
-          <Field name="user_phone" as={TextField} label="Phone"  />
+         <Field name="user_phone" as={TextField} label="Phone"  />
           <Field name="user_email" as={TextField} label="Email"  />
           <Field name="user_salutation" as={TextField} label="Salutation"  />
           <Field name="user_name" as={TextField} label="Name"  />
@@ -255,7 +284,7 @@ export default function UserDetailsModal(props) {
               setAccomodationEnabled(false);
             }
             
-              setFieldValue("package_type", e.target.value);
+            setFieldValue("package_type", e.target.value);
           }}
           inputProps={{
             name: "package_type",
@@ -293,7 +322,8 @@ export default function UserDetailsModal(props) {
             setCheckOutDate("");
             setShowDatePickers(false);
             setShowMemNum(false);
-            
+            if(e.target.value === "single_room") setShowAccompanyingPersonOption(true)
+            else setShowAccompanyingPersonOption(false);
             
           }}
           inputProps={{
@@ -309,6 +339,32 @@ export default function UserDetailsModal(props) {
           <FormHelperText>{errors.accomodation_type}</FormHelperText>
         )}
       </FormControl>}
+          
+    {showAccompanyingPersonOption &&
+    <FormControl sx={{marginTop:"4%",marginBottom:"4%",textAlign:"left"}}  required>
+      <FormLabel id="demo-radio-buttons-group-label">Additional Accomodation for accompanying person</FormLabel>
+      <RadioGroup
+        aria-labelledby="demo-radio-buttons-group-label"
+        value={accompanyingPersonOption}
+        name="accompanying_person_enabled"
+        onChange={(e)=>{
+          if(e.target.value === "not_needed"){
+            setAccompanyingAmount(0);
+            setFieldValue("accompanying_total_amount",0)
+          } 
+          setAccompanyingPersonOption(e.target.value);
+        }}
+      >
+        <FormControlLabel  value="needed" control={<Radio />} label="Additional accommodation needed for accompanying person" />
+        <FormControlLabel  value="not_needed" control={<Radio />} label="Additional accommodation not required" />
+      </RadioGroup>
+      {touched.accompanying_person_enabled && errors.accompanying_person_enabled && (
+          <>
+          <ErrorSnackbar open={errors.accompanying_person_enabled} message="Please specify if additional accommodation is required"/>
+          <FormHelperText sx={{color:"red",fontWeight:"bold",fontSize:"large"}}>{errors.accompanying_person_enabled}</FormHelperText></>
+        )}
+    </FormControl>
+}
 
       <FormControl
         fullWidth
@@ -467,8 +523,8 @@ export default function UserDetailsModal(props) {
                 shrink: true,
               }} 
               inputProps={{
-                min: "2023-06-09",
-                max: "2023-06-11",
+                min: "2023-06-08",
+                max: "2023-06-12",
               }}
               onChange={handleCheckInDateChange}
               required
@@ -535,9 +591,52 @@ export default function UserDetailsModal(props) {
     </>
     }
    
+   {accompanyingPersonOption === "needed" ? 
+            <>
+              <TextField
+                label="Amount paid for package(includng GST)"
+                value={amount_paid}
+                onChange={(e)=>{
+                
+                setFieldValue("amount",(isNaN(parseInt(e.target.value))) ? 0 : parseInt(e.target.value) );
+                setAmountPaid((isNaN(parseInt(e.target.value))) ? 0 : parseInt(e.target.value) );
+                setGrandTotalAmount("Enter amount paid for accompanying person ")
+              }}
+              inputProps={{
+                name: "amount",
+                id: "amount",
+            }}
+                variant="outlined"
+                
+            />
+              <TextField
+                value={values.accompanying_total_amount}
+                label="Amount paid for accompanying person(includng GST)"
+                onChange={(e)=>{
+                setGrandTotalAmount(amount_paid)
+                setFieldValue("accompanying_total_amount",(isNaN(parseInt(e.target.value))) ? 0 : parseInt(e.target.value) );
+                setAccompanyingAmount(parseInt(e.target.value));
+                setGrandTotalAmount(amount_paid+parseInt(e.target.value));
+              }}
+                variant="outlined"
+                inputProps={{
+                  name: "accompanying_total_amount",
+                  id: "accompanying_total_amount",
+              }}
+            />
+              <Field
+                value={(grandTotalAmount) ? (grandTotalAmount) : 0}
+                label="Grand Total amount paid"
+                variant="outlined"
+                as={TextField}
+            />
+            
+            </>
+            :
+            <Field name="amount" as={TextField} label="Total amount paid(including GST)"  error={touched.amount && Boolean(errors.amount)} helperText={touched.amount && errors.amount}/>
+          
+            }
    
-   
-          <Field name="amount" as={TextField} label="Amount paid(Including GST)"  />
           <Field name="paymentID" as={TextField} label="Payment ID"  />
            <FormControl name="paymentStatus">
             <InputLabel>Payment Status</InputLabel>

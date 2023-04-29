@@ -1,4 +1,4 @@
-import { Backdrop, Box, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, InputLabel, MenuItem, Modal, Select, Stack, Typography } from '@mui/material'
+import { Backdrop, Box, Checkbox, CircularProgress, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { TextField, Button } from "@mui/material";
 import { Formik, Form, Field } from "formik";
@@ -7,6 +7,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import axios from 'axios';
 import SuccessSnackBar from './SuccessSnackBar';
 import dayjs from "dayjs";
+import ErrorSnackbar from './ErrorSnackBar';
 
   
 const clickhereButton = {
@@ -23,6 +24,11 @@ const clickhereButton = {
     membership_number: Yup.string().when("member_type", {
       is: "member"  ,
       then: ()=>  Yup.string().matches(/^(LM|PM|AM|ASPIRE|ISAR)-(\d{1,4}|\d{6})$/i,"Please enter a valid membership number").required("Membership number is required") ,
+      otherwise: ()=> Yup.string().notRequired(),
+    }),
+    accompanying_person_enabled :Yup.string().when("accomodation_type", {
+      is: "single_room"  ,
+      then: ()=>  Yup.string().required("Please select an option"),
       otherwise: ()=> Yup.string().notRequired(),
     }),
     user_email: Yup.string().email("Enter a valid email").required("Required"),
@@ -84,7 +90,9 @@ export default function AddEntryModal(props) {
        user_state: "",
        workshop_titles: "",
        membership_number:"",
-       workshop_titles : []
+       workshop_titles : [],
+       accompanying_person_enabled:"",
+       accompanying_total_amount:0
        };
       const[paymentStatus,setPaymentStatus] = useState("")
       const paymentStatusOptions = ["success", "failed", "pending"];
@@ -99,7 +107,13 @@ export default function AddEntryModal(props) {
       const [memNumValid, setMemNumValid] = useState(true);
       const [showDatePickers, setShowDatePickers] = useState(false);
       const [daysToAddtoMax,setDaysToAddtoMax] = useState(0);
-      
+      const [showAccompanyingPersonDescirption, setShowAccompanyingPersonDescirption] = useState(false);
+      const[showAccompanyingPerson,setShowAccompanyingPerson] = useState(false);
+      const [accompanyingPersonOption, setAccompanyingPersonOption] = useState("");
+  
+      const [amount_paid, setAmountPaid] = useState(0);
+      const [accompanying_amount, setAccompanyingAmount] = useState(0)
+      const [grandTotalAmount, setGrandTotalAmount] = useState(0);
       const canCheckMore = checked.length < 2;
       const handleCheckChange = (event) => {
         if (event.target.checked) {
@@ -189,6 +203,8 @@ export default function AddEntryModal(props) {
             setCheckOutDate("");
             setShowDatePickers(false);
             setShowMemNum(false);
+            setShowAccompanyingPerson(false);
+            
             handleResetWorkshops();
             if(e.target.value === "residential") {
               setAccomodationEnabled(true);
@@ -235,7 +251,13 @@ export default function AddEntryModal(props) {
             setCheckOutDate("");
             setShowDatePickers(false);
             setShowMemNum(false);
-            
+            if(e.target.value === "single_room") setShowAccompanyingPerson(true);
+            else {
+              setShowAccompanyingPerson(false);
+              setAccompanyingPersonOption("not_needed")
+              setAccompanyingAmount(0);
+              setFieldValue("accompanying_total_amount",0)
+            }
             
           }}
           inputProps={{
@@ -251,6 +273,53 @@ export default function AddEntryModal(props) {
           <FormHelperText>{errors.accomodation_type}</FormHelperText>
         )}
       </FormControl>}
+      
+      {showAccompanyingPerson && 
+        <>
+        <div>
+          <Typography sx={{marginTop:"2%",color:"#ef6223",fontWeight:"bold"}}>Accompanying Person for Residential Package</Typography>
+          <ul>
+            <li><Typography>Rs 11,000 + 1980 (18% GST) = 12980 (Includes 2 breakfasts, 2 lunches, 1 dinner for 2 nights and 3 days package) </Typography></li>
+            <li><Typography>Rs 9,500 + 1710 (18% GST) = 11210 (Includes 1 breakfast, 2 lunches, 1 dinner for 1 nights and 2 days package) </Typography></li>
+            
+          </ul>
+        </div>
+        <FormControl component="fieldset" sx={{marginTop:"2%",textAlign:"left"}} required>
+        <RadioGroup value={accompanyingPersonOption} onChange={(e)=>{
+          if(e.target.value === "not_needed"){
+            setAccompanyingAmount(0);
+            setFieldValue("accompanying_total_amount",0)
+          } 
+          setAccompanyingPersonOption(e.target.value);
+        }}>
+          <Field name="accompanying_person_enabled" type="radio" value="needed" style={{marginTop:"2%"}} required>
+            {({ field }) => (
+              <FormControlLabel
+                control={<Radio {...field} />}
+                label="Additional accommodation needed for accompanying person"
+              />
+            )}
+          </Field>
+          <Field name="accompanying_person_enabled" type="radio" value="not_needed" style={{marginTop:"2%"}} required> 
+            {({ field }) => (
+              <FormControlLabel
+                control={<Radio {...field} />}
+                label={<Typography>Additional accommodation not required</Typography>}
+                sx={{marginTop:"4%",marginBottom:"2%"}}
+              />
+            )}
+          </Field>
+        </RadioGroup>
+        {touched.accompanying_person_enabled && errors.accompanying_person_enabled && (
+          <>
+          <ErrorSnackbar open={errors.accompanying_person_enabled} message="Please specify if additional accommodation is required"/>
+          <FormHelperText sx={{color:"red",fontWeight:"bold",fontSize:"large"}}>{errors.accompanying_person_enabled}</FormHelperText></>
+        )}
+      </FormControl>
+      
+      </>
+      }
+
 
       <FormControl
         fullWidth
@@ -498,7 +567,52 @@ export default function AddEntryModal(props) {
           <Field name="user_email" as={TextField} label="Email"  error={touched.user_email && Boolean(errors.user_email)} helperText={touched.user_email && errors.user_email}/>
           <Field name="user_salutation" as={TextField} label="Salutation"   error={touched.user_salutation && Boolean(errors.user_salutation)} helperText={touched.user_salutation && errors.user_email}/>
           <Field name="user_name" as={TextField} label="Name"   error={touched.user_name && Boolean(errors.user_name)} helperText={touched.user_name && errors.user_name}/>
-          <Field name="amount" as={TextField} label="Amount paid(includng GST)"  error={touched.amount && Boolean(errors.amount)} helperText={touched.amount && errors.amount}/>
+          
+          
+              
+          
+          {accompanyingPersonOption === "needed" ? 
+            <>
+              <TextField
+                label="Amount paid for package(includng GST)"
+                value={amount_paid}
+                onChange={(e)=>{
+                setFieldValue("amount",(isNaN(parseInt(e.target.value))) ? 0 : parseInt(e.target.value));
+                setAmountPaid((isNaN(parseInt(e.target.value))) ? 0 : parseInt(e.target.value));
+              }}
+                variant="outlined"
+                
+            />
+              <TextField
+                value={values.accompanying_total_amount}
+                label="Amount paid for accompanying person(includng GST)"
+                onChange={(e)=>{
+                setFieldValue("accompanying_total_amount", (isNaN(parseInt(e.target.value))) ? 0 : parseInt(e.target.value));
+                setAccompanyingAmount(parseInt(e.target.value));
+              }}
+                variant="outlined"
+                inputProps={{
+                  name: "accompanying_total_amount",
+                  id: "accompanying_total_amount",
+              }}
+            />
+              <Field
+                value={(amount_paid+accompanying_amount) ? (amount_paid+accompanying_amount) : 0}
+                label="Grand Total amount paid"
+                variant="outlined"
+                as={TextField}
+            />
+            
+            </>
+            :
+            <Field name="amount" as={TextField} label="Total amount paid(including GST)"  error={touched.amount && Boolean(errors.amount)} helperText={touched.amount && errors.amount}/>
+          
+            }
+          
+          
+          
+          
+          
           <Field name="paymentID" as={TextField} label="Payment ID"  error={touched.paymentID && Boolean(errors.paymentID)} helperText={touched.paymentID && errors.paymentID}/>
           <Field name="payment_purpose" as={TextField} label="Payment Purpose"  error={touched.payment_purpose && Boolean(errors.payment_purpose)} helperText={touched.payment_purpose && errors.payment_purpose}/>
           <Field name="user_age" as={TextField} label="Age" error={touched.user_age && Boolean(errors.user_age)} helperText={touched.user_age && errors.user_age} />
