@@ -477,8 +477,8 @@ export default function AddEntryModal(props) {
                 shrink: true,
               }} 
               inputProps={{
-                min: "2023-06-09",
-                max: "2023-06-11",
+                min: "2023-06-08",
+                max: "2023-06-12",
               }}
               onChange={handleCheckInDateChange}
               required
