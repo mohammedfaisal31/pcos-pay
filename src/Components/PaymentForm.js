@@ -352,7 +352,7 @@ const firePayNow = ()=> {
         <CircularProgress color="inherit" />
       </Backdrop>
         <Typography>Please determine your coverage</Typography>
-        <Alert severity="info">For residential packages - Please contact Dr Madhuri Patil @ drmadhuripatil59@gmail.com or pcosart2023@gmail.com if accommodation is required</Alert>
+        <Alert severity="warning">For residential packages - Please contact Dr Madhuri Patil @ drmadhuripatil59@gmail.com or pcosart2023@gmail.com if accommodation is required</Alert>
           <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
           {({ values, errors, touched ,resetForm,setFieldValue}) => (
             <Form>
