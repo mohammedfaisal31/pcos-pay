@@ -102,6 +102,7 @@ const PaymentForm = () => {
   const [accompanyingPersonOption, setAccompanyingPersonOption] = useState("");
   const [payNow, setPayNow] = useState(false);
   const [accomodationEnabled, setAccomodationEnabled] = useState(false);
+  const [residentialNotAvailable, setResidentialNotAvailable] = useState(false);
   
   const {gatewayData, updateGatewayData} = useContext(GatewayDataContext);
   const[gatewayRedirectData, setGatewayRedirectData] = useState({});
@@ -119,6 +120,8 @@ const PaymentForm = () => {
   const [daysToAddtoMax,setDaysToAddtoMax] = useState(0);
    const handleSubmit =   (values) => {
       console.log(values);
+      if(values.package_type === "residential") setResidentialNotAvailable(true);
+      else setResidentialNotAvailable(false);
       axios.post('https://kisargo.ml/api/fetch-price', values)
       .then((result)=>{
         console.log(result.data);
@@ -850,6 +853,7 @@ const firePayNow = ()=> {
           <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleCloseOfflinePaymentModal} variant="contained">OK</Button>
         </DialogContent>
       </Dialog>
+      <ErrorSnackbar open={residentialNotAvailable} message="Residential packages are temporarily unavailable"/>
     </>
   );
 };
