@@ -853,7 +853,7 @@ const firePayNow = ()=> {
           <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleCloseOfflinePaymentModal} variant="contained">OK</Button>
         </DialogContent>
       </Dialog>
-      <ErrorSnackbar open={residentialNotAvailable} message="Residential packages are temporarily unavailable"/>
+      <ErrorSnackbar open={residentialNotAvailable} message="After 16th May - contact Dr Madhuri Patil @ drmadhuripatil59@gmail.com or pcosart2023@gmail.com if accommodation is required"/>
     </>
   );
 };
