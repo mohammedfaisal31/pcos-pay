@@ -2,7 +2,7 @@ import React,{useState,useContext,useEffect} from "react";
 import { ErrorMessage, Field, Form, Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import Modal from '@mui/material/Modal';
-import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress, TableContainer, RadioGroup, Radio } from '@mui/material';
+import { FormControl, FormControlLabel, FormGroup, Checkbox, TextField, DialogTitle, DialogContent, MenuItem, Backdrop, CircularProgress, TableContainer, RadioGroup, Radio, Alert } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import Swal from 'sweetalert';
 import { Table, TableBody, TableHead, TableRow, TableCell } from '@mui/material';
@@ -352,6 +352,7 @@ const firePayNow = ()=> {
         <CircularProgress color="inherit" />
       </Backdrop>
         <Typography>Please determine your coverage</Typography>
+        <Alert severity="info">For residential packages - Please contact Dr Madhuri Patil @ drmadhuripatil59@gmail.com or pcosart2023@gmail.com if accommodation is required</Alert>
           <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
           {({ values, errors, touched ,resetForm,setFieldValue}) => (
             <Form>
@@ -393,7 +394,7 @@ const firePayNow = ()=> {
         >
           <option value="" />
           <option value="non_residential">Non Residential</option>
-          <option value="residential">Residential</option>
+          {/* <option value="residential">Residential</option> */}
         </Select>
         {touched.package_type && errors.package_type && (
           <FormHelperText>{errors.package_type}</FormHelperText>
@@ -853,7 +854,7 @@ const firePayNow = ()=> {
           <Button style={{marginTop:"1%",backgroundColor:"#ef6223"}} onClick={handleCloseOfflinePaymentModal} variant="contained">OK</Button>
         </DialogContent>
       </Dialog>
-      <ErrorSnackbar open={residentialNotAvailable} message="After 16th May - contact Dr Madhuri Patil @ drmadhuripatil59@gmail.com or pcosart2023@gmail.com if accommodation is required"/>
+      {/* <ErrorSnackbar open={residentialNotAvailable} message="Please contact Dr Madhuri Patil @ drmadhuripatil59@gmail.com or pcosart2023@gmail.com if accommodation is required"/> */}
     </>
   );
 };
