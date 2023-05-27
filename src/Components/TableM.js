@@ -50,7 +50,7 @@ const TableM = () => {
   
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [openAddEntryModal, setOpenAddEntryModal] = useState(false);
-    
+  const [visibleRowId, setVisibleRowId] = useState(null);
   
   useEffect(() => {
     axios.get("https://kisargo.ml/api/getAllUsers/")
@@ -69,12 +69,12 @@ const TableM = () => {
     const [openDetailsModal, setOpenDetailsModal] = useState(false);
     const handleFullDetailsClick = (rowData)=>{
           setSelectedRowData(rowData);
-          setOpenDetailsModal(true);
+          setVisibleRowId(rowData.transaction_id);
     }
     
     const handleCloseDetailsModal = ()=>{
       setSelectedRowData(null);
-      setOpenDetailsModal(false)
+      setVisibleRowId(null);
     }
     const handleCloseAddEntryModal = ()=>{
       setOpenAddEntryModal(false)
@@ -364,7 +364,7 @@ useEffect(() => {
             <EditIcon onClick={()=>handleFullDetailsClick(row)}/>
           </IconButton>
         </TableCell>
-        <UserDetailsModal openModal={openDetailsModal} closeModal={handleCloseDetailsModal} data={selectedRowData} />
+        <UserDetailsModal openModal={row.transaction_id === visibleRowId} closeModal={handleCloseDetailsModal} data={selectedRowData} />
         <AddEntryModal openModal={openAddEntryModal} closeModal={handleCloseAddEntryModal} />
         
         
