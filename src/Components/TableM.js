@@ -365,7 +365,6 @@ useEffect(() => {
           </IconButton>
         </TableCell>
         <UserDetailsModal openModal={row.transaction_id === visibleRowId} closeModal={handleCloseDetailsModal} data={selectedRowData} />
-        <AddEntryModal openModal={openAddEntryModal} closeModal={handleCloseAddEntryModal} />
         
         
         <TableCell>
@@ -397,6 +396,7 @@ useEffect(() => {
       onRowsPerPageChange={handleChangeRowsPerPage}
     />
 </TableContainer>
+<AddEntryModal openModal={openAddEntryModal} closeModal={handleCloseAddEntryModal} />
 </Paper>
 
 );
