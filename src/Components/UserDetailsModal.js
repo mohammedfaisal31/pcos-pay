@@ -55,7 +55,7 @@ export default function UserDetailsModal(props) {
         setCheckInDate(props.data.check_in_date);
         setCheckOutDate(props.data.check_out_date);
         setAccomodationEnabled(true);
-        if(props.data.conference_type === "conference_type_1") setShowChecks(true);
+        if(props.data.conference_type === "conference_type_1" || props.data.conference_type === "conference_type_4") setShowChecks(true);
         else setShowChecks(false);
         if(props.data.conference_type === "conference_type_1" || props.data.conference_type === "conference_type_2") setDaysToAddtoMax(2)
         else setDaysToAddtoMax(1);
@@ -63,7 +63,7 @@ export default function UserDetailsModal(props) {
       else {
         setAccomodationEnabled(false) 
         setShowDatePickers(false);
-        if(props.data.conference_type === "conference_type_2" || props.data.conference_type === "conference_type_3") setShowChecks(true);
+        if(props.data.conference_type === "conference_type_2" || props.data.conference_type === "conference_type_3" || props.data.conference_type === "conference_type_4") setShowChecks(true);
         else setShowChecks(false);
       }
       if(props.data.member_type === "member"){
@@ -449,7 +449,7 @@ export default function UserDetailsModal(props) {
           value={values.conference_type}
           label="Conference Selection"
           onChange={(e)=>{
-            if(e.target.value === "conference_type_1") setShowChecks(true);
+            if(e.target.value === "conference_type_1" || e.target.value === "conference_type_4") setShowChecks(true);
             else setShowChecks(false);
             if(e.target.value === "conference_type_1" || e.target.value === "conference_type_2") setDaysToAddtoMax(2)
             else setDaysToAddtoMax(1);
@@ -469,6 +469,7 @@ export default function UserDetailsModal(props) {
           <option value="conference_type_1">2 nights and 3 days - Conference + 2 Workshops</option>
           <option value="conference_type_2">2 nights and 3 days - Conference only</option>
           <option value="conference_type_3">1 nights and 2 days - Conference only</option>
+          <option value="conference_type_4">Workshops only</option>
           
         </Select>
         {touched.conference_type && errors.conference_type && (
@@ -487,7 +488,7 @@ export default function UserDetailsModal(props) {
           value={values.conference_type}
           label = "Conference Selection"
           onChange={(e)=>{
-            if(e.target.value === "conference_type_2" || e.target.value === "conference_type_3") setShowChecks(true)
+            if(e.target.value === "conference_type_2" || e.target.value === "conference_type_3" || e.target.value === "conference_type_4") setShowChecks(true)
             else setShowChecks(false);
             setFieldValue("conference_type", e.target.value);
             setCheckInDate("");
@@ -503,6 +504,7 @@ export default function UserDetailsModal(props) {
           <option value="conference_type_1">Conference only</option>
           <option value="conference_type_2">Conference + 2 Workshops</option>
           <option value="conference_type_3">Post Graduate Students Conference + 2 Workshops</option>
+          <option value="conference_type_4">Workshops only</option>
           
         </Select>
         {touched.conference_type && errors.conference_type && (
