@@ -423,7 +423,7 @@ export default function AddEntryModal(props) {
           <option value="conference_type_1">2 nights and 3 days - Conference + 2 Workshops</option>
           <option value="conference_type_2">2 nights and 3 days - Conference only</option>
           <option value="conference_type_3">1 nights and 2 days - Conference only</option>
-          <option value="conference_type_4">Workshops only</option>
+          <option value="conference_type_4">2 Workshops only with 1 lunch and 1 dinner</option>
           
         </Select>
         {touched.conference_type && errors.conference_type && (
@@ -458,7 +458,7 @@ export default function AddEntryModal(props) {
           <option value="conference_type_1">Conference only</option>
           <option value="conference_type_2">Conference + 2 Workshops</option>
           <option value="conference_type_3">Post Graduate Students Conference + 2 Workshops</option>
-          <option value="conference_type_4">Workshops only</option>
+          <option value="conference_type_4">2 Workshops only with 1 lunch and 1 dinner</option>
           
         </Select>
         {touched.conference_type && errors.conference_type && (
