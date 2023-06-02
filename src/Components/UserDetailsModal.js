@@ -443,11 +443,11 @@ export default function UserDetailsModal(props) {
         margin="normal"
         error={touched.member_type && Boolean(errors.member_type)}
       >
-        <InputLabel htmlFor="conference_type">Conference Selection</InputLabel>
+        <InputLabel htmlFor="conference_type">Conference and Workshop Selection</InputLabel>
         <Select
           native
           value={values.conference_type}
-          label="Conference Selection"
+          label="Conference and Workshop Selection"
           onChange={(e)=>{
             if(e.target.value === "conference_type_1" || e.target.value === "conference_type_4") setShowChecks(true);
             else setShowChecks(false);
@@ -469,7 +469,7 @@ export default function UserDetailsModal(props) {
           <option value="conference_type_1">2 nights and 3 days - Conference + 2 Workshops</option>
           <option value="conference_type_2">2 nights and 3 days - Conference only</option>
           <option value="conference_type_3">1 nights and 2 days - Conference only</option>
-          <option value="conference_type_4">Workshops only</option>
+          <option value="conference_type_4">2 Workshops only with 1 lunch and 1 dinner</option>
           
         </Select>
         {touched.conference_type && errors.conference_type && (
